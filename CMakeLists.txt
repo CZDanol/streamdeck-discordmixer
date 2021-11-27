@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.20)
 
 # Build tested on MSVC 2016 x64
 
-project(streamdock-discordmixer LANGUAGES CXX)
+project(streamdeck-discordmixer LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

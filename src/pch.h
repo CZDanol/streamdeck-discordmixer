@@ -25,8 +25,10 @@
 #define DEBUG 0
 #endif
 
+void __cdecl dbgprintf(const char *format, ...);
+
 #if DEBUG
-#define DebugPrint printf
+#define DebugPrint dbgprintf
 #else
 #define DebugPrint(...) while(0)
 #endif

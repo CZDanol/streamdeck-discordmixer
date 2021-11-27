@@ -11,7 +11,7 @@
       ],
       "SupportedInMultiActions": false,
       "Tooltip": "Opens a mixer for Discord voice chat",
-      "UUID": "cz.danol.discordmixer.openMixer"
+      "UUID": "cz.danol.discordmixer.openmixer"
     },
     {
       "Icon": "icons/icons8_arrow_up_72px",
@@ -23,7 +23,7 @@
         }
       ],
       "Tooltip": "Closes the volume mixer",
-      "UUID": "cz.danol.discordmixer.closeMixer"
+      "UUID": "cz.danol.discordmixer.closemixer"
     },
     {
       "Icon": "icons/icons8_user_72px",
@@ -43,6 +43,7 @@
   "CodePathWin": "bin/streamdeck-discordmixer.exe",
   "Description": "Provides a mixer for Discord voice chat that allows adjusting volume for individual users.\nThis application uses Icons8 icons (https://icons8.com)",
   "Category": "Discord Volume Mixer",
+  "CategoryIcon": "icons/icons8_discord_new_72px",
   "Name": "Discord Volume Mixer",
   "Icon": "icons/icons8_discord_new_72px",
   "URL": "https://www.github.com/CZDanol/streamdeck-discordmixer",
