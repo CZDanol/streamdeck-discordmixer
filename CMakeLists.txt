@@ -11,7 +11,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Target setup
 # ===========================================
 set(target streamdeck-discordmixer)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}/cz.danol.discordmixer.sdPlugin")
+set(bin_directory "${PROJECT_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}/cz.danol.discordmixer.sdPlugin")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${bin_directory}/bin")
 
 add_executable(${target})
 
@@ -28,9 +29,7 @@ file(GLOB_RECURSE source_files CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/src/*.cp
 target_sources(${target} PRIVATE ${source_files})
 target_precompile_headers(${target} PRIVATE "${PROJECT_SOURCE_DIR}/src/pch.h")
 target_include_directories(${target} PRIVATE "${PROJECT_SOURCE_DIR}/src")
-
-file(GLOB_RECURSE dist_files CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/dist/*")
-install(FILES ${dist_files} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+install(DIRECTORY "${PROJECT_SOURCE_DIR}/dist/" DESTINATION ${bin_directory})
 
 # ===========================================
 # Stream Deck SDK

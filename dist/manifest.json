@@ -1,11 +1,11 @@
 {
   "Actions": [
     {
-      "Icon": "icons8_discord_new_24px",
+      "Icon": "icons/icons8_discord_new_24px",
       "Name": "Discord Volume Mixer",
       "States": [
         {
-          "Image": "icons8_discord_new_24px",
+          "Image": "icons/icons8_discord_new_24px",
           "ShowTitle": false,
         }
       ],
@@ -19,7 +19,7 @@
   "CodePathWin": "streamdeck-discordmixer.exe",
   "Description": "Provides a mixer for Discord voice chat that allows adjusting volume for individual users.\nThis application uses Icons8 icons (https://icons8.com)",
   "Name": "Discord Volume Mixer",
-  "Icon": "icons8_discord_new_24px",
+  "Icon": "icons/icons8_discord_new_24px",
   "URL": "https://www.github.com/CZDanol/streamdeck-discordmixer",
   "Version": "1.0",
   "OS": [
