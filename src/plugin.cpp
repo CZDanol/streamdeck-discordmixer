@@ -1,29 +1,19 @@
 #include "plugin.h"
 
+#include <ESDConnectionManager.h>
+
 void Plugin::KeyDownForAction(const std::string &inAction, const std::string &inContext, const json &inPayload, const std::string &inDeviceID) {
+	action_ = inAction;
+	context_ = inContext;
+	payload_ = inPayload;
+	device_ = inDeviceID;
 
-}
+	if(action_ == "cz.danol.discordmixer.openMixer")
+		mConnectionManager->SwitchToProfile(device_, "Discord Volume Mixer");
 
-void Plugin::KeyUpForAction(const std::string &inAction, const std::string &inContext, const json &inPayload, const std::string &inDeviceID) {
+	else if(action_ == "cz.danol.discordmixer.closeMixer")
+		mConnectionManager->SwitchToProfile(device_, nullptr);
 
-}
-
-void Plugin::WillAppearForAction(const std::string &inAction, const std::string &inContext, const json &inPayload, const std::string &inDeviceID) {
-
-}
-
-void Plugin::WillDisappearForAction(const std::string &inAction, const std::string &inContext, const json &inPayload, const std::string &inDeviceID) {
-
-}
-
-void Plugin::DeviceDidConnect(const std::string &inDeviceID, const json &inDeviceInfo) {
-
-}
-
-void Plugin::DeviceDidDisconnect(const std::string &inDeviceID) {
-
-}
-
-void Plugin::SendToPlugin(const std::string &inAction, const std::string &inContext, const json &inPayload, const std::string &inDeviceID) {
-
+	else if(action_ == "cz.danol.discordmixer.user")
+		return;
 }

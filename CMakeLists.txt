@@ -61,3 +61,9 @@ target_link_libraries(${target} PRIVATE "${discord_sdk_lib}")
 
 find_file (discord_sdk_lib_so NAMES discord_game_sdk.dll PATHS "${PROJECT_SOURCE_DIR}/lib/${lib_platform_dir}" REQUIRED)
 install(FILES ${discord_sdk_lib_so} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+
+# ===========================================
+# Finally - install to appdata
+# ===========================================
+file(TO_CMAKE_PATH "$ENV{APPDATA}" appdata_path)
+install(DIRECTORY ${bin_directory} DESTINATION "${appdata_path}/Elgato/StreamDeck/Plugins")
