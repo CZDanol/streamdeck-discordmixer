@@ -10,15 +10,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # ===========================================
 # Target setup
 # ===========================================
-if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-    set(BUILD_TYPE_STRING _dbg)
-else ()
-    set(BUILD_TYPE_STRING)
-endif ()
-
 set(target streamdeck-discordmixer)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}/cz.danol.discordmixer.sdPlugin")
+
 add_executable(${target})
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/bin/${BUILD_TYPE_STRING}")
 
 if (MSVC)
     target_compile_options(${target} PRIVATE "/Zc:__cplusplus")
@@ -33,6 +28,9 @@ file(GLOB_RECURSE source_files CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/src/*.cp
 target_sources(${target} PRIVATE ${source_files})
 target_precompile_headers(${target} PRIVATE "${PROJECT_SOURCE_DIR}/src/pch.h")
 target_include_directories(${target} PRIVATE "${PROJECT_SOURCE_DIR}/src")
+
+file(GLOB_RECURSE dist_files CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/dist/*")
+install(FILES ${dist_files} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
 # ===========================================
 # Stream Deck SDK
@@ -61,3 +59,6 @@ target_sources(${target} PRIVATE ${discord_sdk_files})
 
 find_library(discord_sdk_lib NAMES discord_game_sdk.dll.lib PATHS "${PROJECT_SOURCE_DIR}/lib/${lib_platform_dir}" REQUIRED)
 target_link_libraries(${target} PRIVATE "${discord_sdk_lib}")
+
+find_file (discord_sdk_lib_so NAMES discord_game_sdk.dll PATHS "${PROJECT_SOURCE_DIR}/lib/${lib_platform_dir}" REQUIRED)
+install(FILES ${discord_sdk_lib_so} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
