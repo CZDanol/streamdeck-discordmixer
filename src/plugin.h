@@ -19,7 +19,7 @@ public:
 	bool init(const ESDConfig &esdConfig);
 
 private slots:
-	void onKeyDown(const QString &context, const QString &deviceId, const QJsonObject &payload);
+	void onKeyDown(const ESDActionModel &action);
 
 private:
 	QScopedPointer<ESDPluginBase> esd_;

@@ -1,10 +1,23 @@
 #include <QCoreApplication>
 #include <QCommandLineParser>
+#include <QFile>
 
 #include "plugin.h"
 
+void messageLogger(QtMsgType t, const QMessageLogContext &, const QString &msg) {
+	static QFile f("log.txt");
+	if(!f.isOpen())
+		f.open(QIODevice::Append);
+
+	f.write(msg.toUtf8());
+	f.write("\n");
+	f.flush();
+}
+
 int main(int argc, char *argv[]) {
 	QCoreApplication app(argc, argv);
+	qInstallMessageHandler(&messageLogger);
+	qDebug() << "App start";
 
 	ESDConfig esdConfig;
 	{
