@@ -125,6 +125,8 @@ bool QDiscord::connect(const QString &clientID, const QString &clientSecret) {
 				qWarning() << "QDiscord expected AUTHENTICATE";
 				return false;
 			}
+
+			userID_ = msg["data"]["user"]["id"].toString();
 		}
 
 		qDebug() << "Connection successful";
@@ -141,6 +143,7 @@ bool QDiscord::connect(const QString &clientID, const QString &clientSecret) {
 void QDiscord::disconnect() {
 	socket_.disconnectFromServer();
 	isConnected_ = false;
+	userID_.clear();
 }
 
 QJsonObject QDiscord::sendCommand(const QString &command, const QJsonObject &args) {

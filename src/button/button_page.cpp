@@ -6,7 +6,7 @@ Button_Page::Button_Page(const Button::CtorData &d) : Button(d) {
 
 void Button_Page::onPressed() {
 	const int stepAbs = qAbs(step);
-	const int newOffset = qBound(0, device.userIxOffset + step, (device.voiceStates.size() + stepAbs - 1) / stepAbs);
+	const int newOffset = qBound(0, device.userIxOffset + step, device.voiceStates.size() / stepAbs - 1);
 
 	if(device.userIxOffset == newOffset)
 		return;

@@ -23,6 +23,10 @@ public:
 		return isConnected_;
 	}
 
+	inline const QString &userID() const {
+		return userID_;
+	}
+
 public:
 	QJsonObject sendCommand(const QString &command, const QJsonObject &args);
 
@@ -39,6 +43,7 @@ private:
 private:
 	QLocalSocket socket_;
 	bool isConnected_ = false;
+	QString userID_;
 
 };
 

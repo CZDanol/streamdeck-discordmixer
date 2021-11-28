@@ -28,6 +28,7 @@ public:
 
 private:
 	QHash<QString, QSharedPointer<Device>> devices_;
+	QHash<QString, QString> contextDevices_; /// Map context -> deviceID
 
 };
 

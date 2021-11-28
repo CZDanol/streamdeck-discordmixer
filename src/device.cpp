@@ -72,8 +72,11 @@ void Device::updateData() {
 	const QJsonObject voiceChannelData = plugin.discord.sendCommand("GET_SELECTED_VOICE_CHANNEL", {});
 
 	voiceStates.clear();
-	for(const auto &v: voiceChannelData["data"]["voice_states"].toArray())
-		voiceStates += VoiceState::fromJson(v.toObject());
+	for(const auto &v: voiceChannelData["data"]["voice_states"].toArray()) {
+		VoiceState vs = VoiceState::fromJson(v.toObject());
+		if(vs.userID != plugin.discord.userID())
+			voiceStates += VoiceState::fromJson(v.toObject());
+	}
 
 	updateAllButtons();
 }

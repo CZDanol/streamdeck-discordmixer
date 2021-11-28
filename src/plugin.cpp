@@ -17,13 +17,21 @@ bool Plugin::init(const ESDConfig &esdConfig) {
 		});
 
 		connect(&deck, &QStreamDeckPlugin::willAppear, this, [this](const QStreamDeckAction &action) {
+			contextDevices_[action.context] = action.deviceId;
 			devices_[action.deviceId]->onAppear(action);
 		});
 		connect(&deck, &QStreamDeckPlugin::willDisappear, this, [this](const QStreamDeckAction &action) {
 			devices_[action.deviceId]->onDisappear(action);
+			contextDevices_.remove(action.context);
 		});
 		connect(&deck, &QStreamDeckPlugin::sendToPlugin, this, [this](const QStreamDeckAction &action) {
-			devices_[action.deviceId]->onSendToPlugin(action);
+			// sendToPlugin does not contain deviceID, so we keep the mapping
+			QStreamDeckAction a = action;
+			a.deviceId = contextDevices_.value(action.context);
+			if(a.deviceId.isEmpty())
+				return;
+
+			devices_[a.deviceId]->onSendToPlugin(a);
 		});
 
 		connect(&deck, &QStreamDeckPlugin::keyDown, this, [this](const QStreamDeckAction &action) {

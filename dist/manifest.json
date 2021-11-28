@@ -11,6 +11,7 @@
       ],
       "SupportedInMultiActions": false,
       "Tooltip": "Opens a mixer for Discord voice chat",
+      "PropertyInspectorPath": "inspector/mixer.html",
       "UUID": "cz.danol.discordmixer.openmixer"
     },
     {
