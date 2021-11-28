@@ -8,35 +8,35 @@
 #include "actiontype.h"
 
 class Plugin;
+class Button;
 
 class Device {
 
 public:
 	Device(Plugin &plugin, const QString &deviceID);
+	~Device();
 
 public:
 	void onAppear(const QStreamDeckAction &action);
 	void onDisappear(const QStreamDeckAction &action);
 
 public:
-	void updateAll();
+	void updateData();
+	void updateAllButtons();
 
-private:
-	void updateUserButton(UserIx userIx, const ActionContext &ctx);
+public:
+	Plugin &plugin;
+	const QString deviceID;
 
-private:
-	Plugin &plugin_;
-	const QString deviceID_;
-
-private:
-	/// UserIx -> button mapping
-	QMultiHash<UserIx, ActionContext> userButtons_;
+public:
+	QHash<QString, Button*> buttons;
+	QMultiHash<UserIx, Button*> userRelatedButtons;
 
 	/// Array of all users in the voice channel data
-	QList<QJsonObject> voiceStates_;
+	QList<QJsonObject> voiceStates;
 
 	/// Used in pagination
-	int userIxOffset_ = 0;
+	int userIxOffset = 0;
 
 };
 

@@ -1,43 +1,54 @@
 #include "device.h"
 
-#include "actiontype.h"
 #include "plugin.h"
 
-Device::Device(Plugin &plugin, const QString &deviceID) : plugin_(plugin), deviceID_(deviceID) {
+#include "button/button.h"
+#include "button/button_open_mixer.h"
+#include "button/button_back.h"
+#include "button/button_user.h"
+
+Device::Device(Plugin &plugin, const QString &deviceID) : plugin(plugin), deviceID(deviceID) {
 
 }
 
+Device::~Device() {
+	qDeleteAll(buttons);
+}
+
 void Device::onAppear(const QStreamDeckAction &action) {
-	if(action.action == ActionType::user) {
-		qDebug() << "APPEAR" << action.payload;
-		const UserIx userIx = action.payload["settings"]["user_ix"].toString().toInt();
-		userButtons_.insert(userIx, action.context);
-		updateUserButton(userIx, action.context);
+#define CTOR(uid, Class) {uid, [] (const Button::CtorData &d) { return new Class(d); }}
+
+	using CtorF = std::function<Button *(const Button::CtorData &)>;
+	static const QHash<QString, CtorF> ctors{
+		CTOR("cz.danol.discordmixer.openmixer", Button_OpenMixer),
+		CTOR("cz.danol.discordmixer.back", Button_Back),
+
+		CTOR("cz.danol.discordmixer.user", Button_User),
+	};
+
+	if(auto ctor = ctors.value(action.action)) {
+		Button *btn = ctor(Button::CtorData{this, action.action, action.context, action.payload});
+		buttons[action.context] = btn;
+		btn->update();
 	}
 }
 
 void Device::onDisappear(const QStreamDeckAction &action) {
-	if(action.action == ActionType::user) {
-		qDebug() << "DISAPPEAR" << action.payload;
-		userButtons_.remove(action.payload["settings"]["user_ix"].toString().toInt(), action.context);
-	}
+	if(auto btn = buttons.take(action.context))
+		delete btn;
 }
 
-void Device::updateAll() {
-	const QJsonObject voiceChannelData = plugin_.discord.sendCommandAndGetResponse("GET_SELECTED_VOICE_CHANNEL", {});
+void Device::updateData() {
+	const QJsonObject voiceChannelData = plugin.discord.sendCommandAndGetResponse("GET_SELECTED_VOICE_CHANNEL", {});
 
-	voiceStates_.clear();
+	voiceStates.clear();
 	for(const auto &v: voiceChannelData["data"]["voice_states"].toArray())
-		voiceStates_ += v.toObject();
+		voiceStates += v.toObject();
 
-	for(auto it = userButtons_.begin(), end = userButtons_.end(); it != end; it++)
-		updateUserButton(it.key(), it.value());
+	updateAllButtons();
 }
 
-void Device::updateUserButton(UserIx userIx, const ActionContext &ctx) {
-	const QJsonObject json = voiceStates_.value(userIx + userIxOffset_);
-
-	plugin_.deck.setTitle(QStringLiteral("%1\n\n%2 %").arg(json["nick"].toString(), json["volume"].toInt()), ctx, kESDSDKTarget_HardwareAndSoftware);
-
-	qDebug() << "Update" << userIx << json;
+void Device::updateAllButtons() {
+	for(Button *btn: buttons)
+		btn->update();
 }

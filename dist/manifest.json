@@ -15,7 +15,7 @@
     },
     {
       "Icon": "icons/icons8_arrow_up_72px",
-      "Name": "[DVM] Close",
+      "Name": "[DVM] Back",
       "States": [
         {
           "Image": "icons/icons8_arrow_up_72px",
@@ -23,7 +23,7 @@
         }
       ],
       "Tooltip": "Closes the volume mixer",
-      "UUID": "cz.danol.discordmixer.closemixer"
+      "UUID": "cz.danol.discordmixer.back"
     },
     {
       "Icon": "icons/icons8_user_72px",
@@ -37,6 +37,74 @@
       "PropertyInspectorPath": "inspector/user.html",
       "Tooltip": "User button",
       "UUID": "cz.danol.discordmixer.user"
+    },
+    {
+      "Icon": "icons/icons8_plus_math_72px",
+      "Name": "[DVM] Volume up",
+      "States": [
+        {
+          "Image": "icons/icons8_plus_math_72px",
+          "ShowTitle": false
+        },
+        {
+          "Image": "icons/noicon",
+          "ShowTitle": false
+        }
+      ],
+      "PropertyInspectorPath": "inspector/user.html",
+      "Tooltip": "Increase volume",
+      "UUID": "cz.danol.discordmixer.volumeup"
+    },
+    {
+      "Icon": "icons/icons8_minus_72px",
+      "Name": "[DVM] Volume down",
+      "States": [
+        {
+          "Image": "icons/icons8_minus_72px",
+          "ShowTitle": false
+        },
+        {
+          "Image": "icons/noicon",
+          "ShowTitle": false
+        }
+      ],
+      "PropertyInspectorPath": "inspector/user.html",
+      "Tooltip": "Decrease volume",
+      "UUID": "cz.danol.discordmixer.volumedown"
+    },
+    {
+      "Icon": "icons/icons8_forward_72px",
+      "Name": "[DVM] Next page",
+      "States": [
+        {
+          "Image": "icons/icons8_forward_72px",
+          "ShowTitle": false
+        },
+        {
+          "Image": "icons/noicon",
+          "ShowTitle": false
+        }
+      ],
+      "PropertyInspectorPath": "inspector/user.html",
+      "Tooltip": "Go to next page",
+      "UUID": "cz.danol.discordmixer.nextpage"
+    },
+    {
+      "Icon": "icons/icons8_back_72px",
+      "Name": "[DVM] Previous page",
+      "States": [
+        {
+          "Image": "icons/icons8_back_72px",
+          "ShowTitle": false
+        },
+        {
+          "Image": "icons/noicon",
+          "ShowTitle": false
+        }
+      ],
+      "PropertyInspectorPath": "inspector/user.html",
+      "Tooltip": "Goto previous page",
+      "UUID": "cz.danol.discordmixer.previouspage"
     }
   ],
   "SDKVersion": 2,

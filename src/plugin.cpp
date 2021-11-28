@@ -1,7 +1,5 @@
 #include "plugin.h"
 
-#include "actiontype.h"
-
 bool Plugin::init(const ESDConfig &esdConfig) {
 	// Init Stream Deck
 	{
@@ -40,14 +38,12 @@ void Plugin::onKeyDown(const QStreamDeckAction &action) {
 
 	if(a == ActionType::openMixer) {
 		deck.switchProfile(action.deviceId, "Discord Volume Mixer");
-		devices_[action.deviceId]->updateAll();
+		devices_[action.deviceId]->updateData();
 	}
 
 	else if(a == ActionType::closeMixer)
 		deck.switchProfile(action.deviceId, "");
 
-	else if(a == ActionType::user) {
+	else
 
-		return;
-	}
 }

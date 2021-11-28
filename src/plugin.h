@@ -33,3 +33,5 @@ private:
 	QHash<QString, QSharedPointer<Device>> devices_;
 
 };
+
+extern Plugin *plugin;
