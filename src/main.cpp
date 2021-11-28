@@ -1,4 +1,4 @@
-#include <QCoreApplication>
+#include <QGuiApplication>
 #include <QCommandLineParser>
 #include <QFile>
 
@@ -7,7 +7,7 @@
 void messageLogger(QtMsgType t, const QMessageLogContext &, const QString &msg) {
 	static QFile f("log.txt");
 	if(!f.isOpen())
-		f.open(QIODevice::Append);
+		f.open(QIODevice::WriteOnly);
 
 	f.write(msg.toUtf8());
 	f.write("\n");
@@ -15,7 +15,7 @@ void messageLogger(QtMsgType t, const QMessageLogContext &, const QString &msg) 
 }
 
 int main(int argc, char *argv[]) {
-	QCoreApplication app(argc, argv);
+	QGuiApplication app(argc, argv);
 	qInstallMessageHandler(&messageLogger);
 	qDebug() << "App start";
 
@@ -46,8 +46,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	Plugin plugin;
-	if(!plugin.init(esdConfig))
-		return -1;
+	const bool r = plugin.init(esdConfig);
 
 	return app.exec();
 }

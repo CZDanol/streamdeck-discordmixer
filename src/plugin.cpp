@@ -21,7 +21,7 @@ bool Plugin::init(const ESDConfig &esdConfig) {
 
 	// Init Discord
 	{
-		if(!discord_.connect(914314199436509185))
+		if(!discord_.connect("914314199436509185"))
 			return false;
 	}
 

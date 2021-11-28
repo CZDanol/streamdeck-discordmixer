@@ -15,7 +15,7 @@ set(BUILD_IN_STREAMDECK_PLUGINS_DIR ON)
 set(target streamdeck-discordmixer)
 
 # Qt setup
-find_package(Qt6 COMPONENTS Core WebSockets REQUIRED CONFIG)
+find_package(Qt6 COMPONENTS Core WebSockets Network NetworkAuth Gui REQUIRED CONFIG)
 set(CMAKE_AUTOMOC ON)
 
 if (BUILD_IN_STREAMDECK_PLUGINS_DIR)
@@ -27,7 +27,7 @@ endif ()
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${target_directory}/bin")
 qt_add_executable(${target})
-target_link_libraries(${target} PRIVATE Qt6::WebSockets)
+target_link_libraries(${target} PRIVATE Qt6::WebSockets Qt6::Network Qt6::NetworkAuth Qt6::Gui)
 target_compile_definitions(${target} PRIVATE QT_DISABLE_DEPRECATED_BEFORE=0x060200)
 
 # ===========================================

@@ -3,6 +3,7 @@
 #include <QObject>
 #include <QLocalSocket>
 #include <QJsonObject>
+#include <QJsonArray>
 
 class QDiscord : public QObject {
 	Q_OBJECT
@@ -14,9 +15,16 @@ public:
 	/**
 	 * Tries to connext to the Discord. Returns true if successfull (this function is blocking)
 	 */
-	bool connect(qint64 clientID);
+	bool connect(const QString &clientID);
 
 	void disconnect();
+
+public:
+	void sendCommand(const QString &command, const QJsonObject &args);
+	inline QJsonObject sendCommandAndGetResponse(const QString &command, const QJsonObject &args) {
+		sendCommand(command, args);
+		return readMessage();
+	}
 
 private:
 	/// Blocking reads a packet
