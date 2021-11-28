@@ -19,12 +19,12 @@ public:
 
 	void disconnect();
 
-public:
-	void sendCommand(const QString &command, const QJsonObject &args);
-	inline QJsonObject sendCommandAndGetResponse(const QString &command, const QJsonObject &args) {
-		sendCommand(command, args);
-		return readMessage();
+	inline bool isConnected() const {
+		return isConnected_;
 	}
+
+public:
+	QJsonObject sendCommand(const QString &command, const QJsonObject &args);
 
 private:
 	/// Blocking reads a packet
@@ -38,6 +38,7 @@ private:
 
 private:
 	QLocalSocket socket_;
+	bool isConnected_ = false;
 
 };
 

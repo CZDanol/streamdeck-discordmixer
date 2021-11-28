@@ -7,6 +7,31 @@
 #include "button/button_back.h"
 #include "button/button_user.h"
 #include "button/button_volume.h"
+#include "button/button_page.h"
+
+Button *createButton(Device *dev, const Button::CtorData &d) {
+#define CTOR(uid, Class) {uid, [] (const Button::CtorData &d) { return new Class(d); }}
+
+	using CtorF = std::function<Button *(const Button::CtorData &)>;
+	static const QHash<QString, CtorF> ctors{
+		CTOR("cz.danol.discordmixer.openmixer", Button_OpenMixer),
+		CTOR("cz.danol.discordmixer.back", Button_Back),
+		CTOR("cz.danol.discordmixer.nextpage", Button_Page),
+		CTOR("cz.danol.discordmixer.previouspage", Button_Page),
+
+		CTOR("cz.danol.discordmixer.user", Button_User),
+		CTOR("cz.danol.discordmixer.volumeup", Button_Volume),
+		CTOR("cz.danol.discordmixer.volumedown", Button_Volume),
+	};
+
+	auto ctor = ctors.value(d.action);
+	if(!ctor)
+		return nullptr;
+
+	Button *btn = ctor(d);
+	dev->buttons[d.context] = btn;
+	btn->update();
+}
 
 Device::Device(Plugin &plugin, const QString &deviceID) : plugin(plugin), deviceID(deviceID) {
 
@@ -17,32 +42,34 @@ Device::~Device() {
 }
 
 void Device::onAppear(const QStreamDeckAction &action) {
-#define CTOR(uid, Class) {uid, [] (const Button::CtorData &d) { return new Class(d); }}
-
-	using CtorF = std::function<Button *(const Button::CtorData &)>;
-	static const QHash<QString, CtorF> ctors{
-		CTOR("cz.danol.discordmixer.openmixer", Button_OpenMixer),
-		CTOR("cz.danol.discordmixer.back", Button_Back),
-
-		CTOR("cz.danol.discordmixer.user", Button_User),
-		CTOR("cz.danol.discordmixer.volumeup", Button_Volume),
-		CTOR("cz.danol.discordmixer.volumedown", Button_Volume),
-	};
-
-	if(auto ctor = ctors.value(action.action)) {
-		Button *btn = ctor(Button::CtorData{this, action.action, action.context, action.payload});
-		buttons[action.context] = btn;
-		btn->update();
-	}
+	createButton(this, Button::CtorData{this, action.action, action.context, action.payload});
 }
 
 void Device::onDisappear(const QStreamDeckAction &action) {
-	if(auto btn = buttons.take(action.context))
-		delete btn;
+	delete buttons.take(action.context);
+}
+
+void Device::onSendToPlugin(const QStreamDeckAction &action) {
+	// Basically recreate the button
+	Button *btn = buttons.take(action.context);
+	if(!btn)
+		return;
+
+	Button::CtorData d{this, action.action, action.context, btn->payload};
+	QJsonObject s = d.payload["settings"].toObject();
+
+	for(auto it = action.payload.begin(), end = action.payload.end(); it != end; it++) {
+		s[it.key()] = it.value();
+	}
+
+	d.payload["settings"] = s;
+	createButton(this, d);
+
+	delete btn;
 }
 
 void Device::updateData() {
-	const QJsonObject voiceChannelData = plugin.discord.sendCommandAndGetResponse("GET_SELECTED_VOICE_CHANNEL", {});
+	const QJsonObject voiceChannelData = plugin.discord.sendCommand("GET_SELECTED_VOICE_CHANNEL", {});
 
 	voiceStates.clear();
 	for(const auto &v: voiceChannelData["data"]["voice_states"].toArray())

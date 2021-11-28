@@ -30,7 +30,7 @@
       "Name": "[DVM] User",
       "States": [
         {
-          "Image": "icons/icons8_user_72px",
+          "Image": "icons/noicon",
           "ShowTitle": false
         }
       ],
@@ -86,6 +86,7 @@
         }
       ],
       "Tooltip": "Go to next page",
+      "PropertyInspectorPath": "inspector/page.html",
       "UUID": "cz.danol.discordmixer.nextpage"
     },
     {
@@ -102,6 +103,7 @@
         }
       ],
       "Tooltip": "Goto previous page",
+      "PropertyInspectorPath": "inspector/page.html",
       "UUID": "cz.danol.discordmixer.previouspage"
     }
   ],

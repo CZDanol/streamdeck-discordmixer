@@ -4,6 +4,6 @@ VoiceState VoiceState::fromJson(const QJsonObject &json) {
 	VoiceState r;
 	r.nick = json["nick"].toString();
 	r.userID = json["user"]["id"].toString();
-	r.volume = json["volume"].toInt();
+	r.volume = static_cast<int>(json["volume"].toDouble());
 	return r;
 }

@@ -23,12 +23,14 @@ public:
 
 public:
 	virtual void onPressed() {}
+	virtual void onReleased() {}
 
 	virtual void update() {}
 
 public:
 	Device &device;
 	const QString context;
+	const QJsonObject payload;
 
 };
 

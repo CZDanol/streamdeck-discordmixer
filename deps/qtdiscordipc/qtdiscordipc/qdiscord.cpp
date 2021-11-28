@@ -23,6 +23,9 @@ QDiscord::QDiscord() {
 	QObject::connect(&socket_, &QLocalSocket::errorOccurred, this, [this](const QLocalSocket::LocalSocketError &err) {
 		qWarning() << "QDiscord socket error: " << static_cast<int>(err);
 	});
+	QObject::connect(&socket_, &QLocalSocket::disconnected, this, [this] {
+		disconnect();
+	});
 }
 
 bool QDiscord::connect(const QString &clientID, const QString &clientSecret) {
@@ -62,7 +65,7 @@ bool QDiscord::connect(const QString &clientID, const QString &clientSecret) {
 
 		// Send authorization request
 		if(oauthData["access_token"].isNull()) {
-			const QJsonObject msg = sendCommandAndGetResponse("AUTHORIZE", QJsonObject{
+			const QJsonObject msg = sendCommand("AUTHORIZE", QJsonObject{
 				{"client_id", clientID},
 				{"scopes",    QJsonArray::fromStringList(scopes)}
 			});
@@ -114,7 +117,7 @@ bool QDiscord::connect(const QString &clientID, const QString &clientSecret) {
 
 		// Authenticate
 		{
-			const QJsonObject msg = sendCommandAndGetResponse("AUTHENTICATE", QJsonObject{
+			const QJsonObject msg = sendCommand("AUTHENTICATE", QJsonObject{
 				{"access_token", oauthData["access_token"].toString()}
 			});
 
@@ -131,20 +134,24 @@ bool QDiscord::connect(const QString &clientID, const QString &clientSecret) {
 	if(!r)
 		disconnect();
 
+	isConnected_ = r;
 	return r;
 }
 
 void QDiscord::disconnect() {
 	socket_.disconnectFromServer();
+	isConnected_ = false;
 }
 
-void QDiscord::sendCommand(const QString &command, const QJsonObject &args) {
+QJsonObject QDiscord::sendCommand(const QString &command, const QJsonObject &args) {
 	QJsonObject message{
 		{"cmd",   command},
 		{"args",  args},
 		{"nonce", QString::number(QRandomGenerator64::global()->generate())}
 	};
 	sendMessage(message);
+
+	return readMessage();
 }
 
 QJsonObject QDiscord::readMessage() {

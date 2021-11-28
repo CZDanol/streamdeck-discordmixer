@@ -8,13 +8,14 @@ public:
 	Button_Volume(const CtorData &d);
 
 public:
+	VoiceState *voiceState();
+
+public:
 	virtual void update() override;
 
 public:
 	virtual void onPressed() override;
-
-public:
-	VoiceState *voiceState();
+	virtual void onReleased() override;
 
 public:
 	int step;

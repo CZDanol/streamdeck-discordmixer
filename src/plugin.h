@@ -26,9 +26,6 @@ public:
 	QStreamDeckPlugin deck;
 	QDiscord discord;
 
-private slots:
-	void onKeyDown(const QStreamDeckAction &action);
-
 private:
 	QHash<QString, QSharedPointer<Device>> devices_;
 

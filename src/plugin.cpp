@@ -22,20 +22,19 @@ bool Plugin::init(const ESDConfig &esdConfig) {
 		connect(&deck, &QStreamDeckPlugin::willDisappear, this, [this](const QStreamDeckAction &action) {
 			devices_[action.deviceId]->onDisappear(action);
 		});
+		connect(&deck, &QStreamDeckPlugin::sendToPlugin, this, [this](const QStreamDeckAction &action) {
+			devices_[action.deviceId]->onSendToPlugin(action);
+		});
 
-		connect(&deck, &QStreamDeckPlugin::keyDown, this, &Plugin::onKeyDown);
-	}
-
-	// Init Discord
-	{
-		if(!discord.connect("914314199436509185", "SzXpJsT64jvZZINODArVirIYY-BkVepl"))
-			return false;
+		connect(&deck, &QStreamDeckPlugin::keyDown, this, [this](const QStreamDeckAction &action) {
+			if(auto btn = devices_[action.deviceId]->buttons.value(action.context))
+				btn->onPressed();
+		});
+		connect(&deck, &QStreamDeckPlugin::keyUp, this, [this](const QStreamDeckAction &action) {
+			if(auto btn = devices_[action.deviceId]->buttons.value(action.context))
+				btn->onReleased();
+		});
 	}
 
 	return true;
-}
-
-void Plugin::onKeyDown(const QStreamDeckAction &action) {
-	if(auto btn = devices_[action.deviceId]->buttons.value(action.context))
-		btn->onPressed();
 }
