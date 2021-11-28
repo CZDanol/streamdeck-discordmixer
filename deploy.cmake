@@ -10,8 +10,6 @@ find_program(WINDEPLOYQT_EXECUTABLE windeployqt HINTS "${qt_bin_dir}")
 execute_process(
         COMMAND "${WINDEPLOYQT_EXECUTABLE}"
         "${target_file}"
-        "--qmldir" "${PROJECT_SOURCE_DIR}/qml"
-        --qmldir "${PROJECT_SOURCE_DIR}/src"
         --compiler-runtime
 )
 message(STATUS "Qt deployed.")

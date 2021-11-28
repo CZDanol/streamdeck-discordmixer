@@ -31,6 +31,8 @@ Button *createButton(Device *dev, const Button::CtorData &d) {
 	Button *btn = ctor(d);
 	dev->buttons[d.context] = btn;
 	btn->update();
+
+	return btn;
 }
 
 Device::Device(Plugin &plugin, const QString &deviceID) : plugin(plugin), deviceID(deviceID) {

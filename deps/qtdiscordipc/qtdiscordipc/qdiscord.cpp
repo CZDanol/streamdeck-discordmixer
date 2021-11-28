@@ -94,6 +94,8 @@ bool QDiscord::connect(const QString &clientID, const QString &clientSecret) {
 			QEventLoop l;
 			QObject::connect(r, &QNetworkReply::finished, &l, &QEventLoop::quit);
 
+			qDebug() << "AUTH REQ" << req.url() << q.toString();
+
 			l.exec();
 			r->deleteLater();
 
