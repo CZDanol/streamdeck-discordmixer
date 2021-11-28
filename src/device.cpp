@@ -10,22 +10,34 @@ Device::Device(Plugin &plugin, const QString &deviceID) : plugin_(plugin), devic
 void Device::onAppear(const QStreamDeckAction &action) {
 	if(action.action == ActionType::user) {
 		qDebug() << "APPEAR" << action.payload;
-		userActions_.insert(action.payload["user_ix"].toInt(), action.context);
+		const UserIx userIx = action.payload["settings"]["user_ix"].toString().toInt();
+		userButtons_.insert(userIx, action.context);
+		updateUserButton(userIx, action.context);
 	}
 }
 
 void Device::onDisappear(const QStreamDeckAction &action) {
 	if(action.action == ActionType::user) {
 		qDebug() << "DISAPPEAR" << action.payload;
-		userActions_.remove(action.payload["user_ix"].toInt(), action.context);
+		userButtons_.remove(action.payload["settings"]["user_ix"].toString().toInt(), action.context);
 	}
 }
 
 void Device::updateAll() {
 	const QJsonObject voiceChannelData = plugin_.discord.sendCommandAndGetResponse("GET_SELECTED_VOICE_CHANNEL", {});
-	voiceStates_ = voiceChannelData["data"]["voice_states"];
+
+	voiceStates_.clear();
+	for(const auto &v: voiceChannelData["data"]["voice_states"].toArray())
+		voiceStates_ += v.toObject();
+
+	for(auto it = userButtons_.begin(), end = userButtons_.end(); it != end; it++)
+		updateUserButton(it.key(), it.value());
 }
 
 void Device::updateUserButton(UserIx userIx, const ActionContext &ctx) {
+	const QJsonObject json = voiceStates_.value(userIx + userIxOffset_);
 
+	plugin_.deck.setTitle(QStringLiteral("%1\n\n%2 %").arg(json["nick"].toString(), json["volume"].toInt()), ctx, kESDSDKTarget_HardwareAndSoftware);
+
+	qDebug() << "Update" << userIx << json;
 }

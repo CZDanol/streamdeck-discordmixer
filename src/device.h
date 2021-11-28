@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QString>
+#include <QJsonArray>
 
 #include <qtstreamdeck/qstreamdeckaction.h>
 
@@ -28,8 +29,14 @@ private:
 	const QString deviceID_;
 
 private:
-	QMultiHash<UserIx, ActionContext> userActions_;
-	QJsonArray voiceStates_;
+	/// UserIx -> button mapping
+	QMultiHash<UserIx, ActionContext> userButtons_;
+
+	/// Array of all users in the voice channel data
+	QList<QJsonObject> voiceStates_;
+
+	/// Used in pagination
+	int userIxOffset_ = 0;
 
 };
 
