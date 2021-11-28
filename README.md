@@ -17,7 +17,7 @@ This is a plugin for Stream Deck that allows setting volume for individual users
 
 ## Third-party libraries & stuff
 * Qt 6 (tested on Qt 6.2.1 MSVC 2019 Win x64)
-* I copied a bunch of Stream Deck control functionality from [fredemmott](https://github.com/fredemmott/StreamDeck-CPPSDK), though I adjusted it.
+* I copied a bunch of Stream Deck control functionality from [alexandarZ / ElgatoStreamDeck-QtPluginBase](https://github.com/alexandarZ/ElgatoStreamDeck-QtPluginBase), though I adjusted it.
 * Icons8 icons
 * Communicates with Discord via IPC through QLocalSocket.
 
