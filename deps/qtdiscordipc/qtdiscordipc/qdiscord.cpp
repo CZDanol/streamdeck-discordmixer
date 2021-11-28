@@ -70,19 +70,36 @@ bool QDiscord::connect(const QString &clientID) {
 
 			QEventLoop evl;
 
-			QOAuthHttpServerReplyHandler *replyHandler = new QOAuthHttpServerReplyHandler(1337, this);
+			class ReplyHandler : public QOAuthHttpServerReplyHandler {
+			public:
+				ReplyHandler(int port, QObject *parent) : QOAuthHttpServerReplyHandler(port, parent) {
+
+				}
+
+			protected:
+				virtual void networkReplyFinished(QNetworkReply *reply) override {
+					qDebug() << "REPLY" << reply->readAll();
+				}
+			};
+
+			QOAuthHttpServerReplyHandler *replyHandler = new ReplyHandler(1337, this);
 			replyHandler->setCallbackPath("callback");
 
 			oauth.setReplyHandler(replyHandler);
-			oauth.setAuthorizationUrl(QUrl("https://discord.com/api/oauth2/authorize"));
+			oauth.setAuthorizationUrl(QUrl(QStringLiteral("https://discord.com/api/oauth2/authorize?code=%1").arg(authCode)));
 			oauth.setAccessTokenUrl(QUrl("https://discord.com/api/oauth2/token"));
 			oauth.setClientIdentifier(clientID);
+			oauth.setScope(scopes.join(' '));
+			oauth.setClientIdentifierSharedKey("SzXpJsT64jvZZINODArVirIYY-BkVepl");
+			//oauth.setClientIdentifierSharedKey(authCode);
 			oauth.setModifyParametersFunction([&](QAbstractOAuth::Stage, QMultiMap<QString, QVariant> *parameters) {
-				parameters->replace("code", authCode);
+				//parameters->replace("code", authCode);
 				parameters->replace("redirect_uri", "http://localhost:1337/callback");
-				parameters->replace("scope", scopes.join(' '));
 			});
 
+			QObject::connect(replyHandler, &QOAuthHttpServerReplyHandler::replyDataReceived, [](const auto &d) {
+				qDebug() << "REPLY" << d;
+			});
 			QObject::connect(&oauth, &QOAuth2AuthorizationCodeFlow::authorizeWithBrowser, [](const QUrl &url) {
 				qDebug() << "Auth with browser";
 				QDesktopServices::openUrl(url);
@@ -118,27 +135,27 @@ bool QDiscord::connect(const QString &clientID) {
 
 			qWarning() << "OAUTH SUCCESS";
 
-		/*	QNetworkAccessManager nm;
-			QNetworkRequest req;
-			const QUrlQuery q{
-				{"client_id",     clientID},
-				{"client_secret", "code"},
-				{"code",          authCode},
-				{"scope",         scopes.join(' ')},
-				{"grant_type",    "authorization_code"},
-			};
-			QUrl url("https://discord.com/api/oauth2/token");
-			req.setUrl(url);
-			req.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
-			auto r = nm.post(req, q.toString(QUrl::FullyEncoded).toUtf8());
+			/*	QNetworkAccessManager nm;
+				QNetworkRequest req;
+				const QUrlQuery q{
+					{"client_id",     clientID},
+					{"client_secret", "code"},
+					{"code",          authCode},
+					{"scope",         scopes.join(' ')},
+					{"grant_type",    "authorization_code"},
+				};
+				QUrl url("https://discord.com/api/oauth2/token");
+				req.setUrl(url);
+				req.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+				auto r = nm.post(req, q.toString(QUrl::FullyEncoded).toUtf8());
 
-			QEventLoop l;
-			QObject::connect(r, &QNetworkReply::finished, &l, &QEventLoop::quit);
+				QEventLoop l;
+				QObject::connect(r, &QNetworkReply::finished, &l, &QEventLoop::quit);
 
-			l.exec();
+				l.exec();
 
-			qDebug() << r->errorString() << r->readAll();
-			r->deleteLater();*/
+				qDebug() << r->errorString() << r->readAll();
+				r->deleteLater();*/
 
 			/*if(!accessToken.isEmpty()) {
 				tokenFile.open(QIODevice::WriteOnly);
