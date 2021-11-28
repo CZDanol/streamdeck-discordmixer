@@ -33,17 +33,23 @@ target_compile_definitions(${target} PRIVATE QT_DISABLE_DEPRECATED_BEFORE=0x0602
 # ===========================================
 # Sources
 # ===========================================
-file(GLOB_RECURSE streamdeckplugin_files CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/deps/streamdeck_qtpluginbase/ElgatoStreamDeck/*.cpp")
-target_sources(${target} PRIVATE ${streamdeckplugin_files})
-target_include_directories(${target} PRIVATE "${PROJECT_SOURCE_DIR}/deps/streamdeck_qtpluginbase")
-
-# ===========================================
-# StreamDeck plugin
-# ===========================================
 file(GLOB_RECURSE source_files CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/src/*.cpp")
 target_sources(${target} PRIVATE ${source_files})
 target_include_directories(${target} PRIVATE "${PROJECT_SOURCE_DIR}/src")
 
+# ===========================================
+# QtStreamDeck
+# ===========================================
+file(GLOB_RECURSE streamdeckplugin_files CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/deps/qtstreamdeck/*.cpp")
+target_sources(${target} PRIVATE ${streamdeckplugin_files})
+target_include_directories(${target} PRIVATE "${PROJECT_SOURCE_DIR}/deps/qtstreamdeck")
+
+# ===========================================
+# QtDiscord
+# ===========================================
+file(GLOB_RECURSE discordipc_files CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/deps/qtdiscordipc/*.cpp")
+target_sources(${target} PRIVATE ${discordipc_files})
+target_include_directories(${target} PRIVATE "${PROJECT_SOURCE_DIR}/deps/qtdiscordipc")
 
 # ===========================================
 # Deployment

@@ -3,7 +3,8 @@
 #include <QString>
 #include <QScopedPointer>
 
-#include <ElgatoStreamDeck/esdplugin.h>
+#include <qtstreamdeck/qstreamdeckplugin.h>
+#include <qtdiscordipc/qdiscord.h>
 
 struct ESDConfig {
 	int port;
@@ -19,9 +20,10 @@ public:
 	bool init(const ESDConfig &esdConfig);
 
 private slots:
-	void onKeyDown(const ESDActionModel &action);
+	void onKeyDown(const QStreamDeckAction &action);
 
 private:
-	QScopedPointer<ESDPluginBase> esd_;
+	QStreamDeckPlugin deck_;
+	QDiscord discord_;
 
 };

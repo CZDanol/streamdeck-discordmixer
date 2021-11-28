@@ -1,7 +1,6 @@
 #include "plugin.h"
 
 #include <QDebug>
-#include <QFile>
 
 struct ActionType {
 	static const inline QString openMixer = "cz.danol.discordmixer.openmixer";
@@ -11,23 +10,32 @@ struct ActionType {
 
 
 bool Plugin::init(const ESDConfig &esdConfig) {
-	esd_.reset(new ESDPluginBase(esdConfig.port, esdConfig.pluginUUID, esdConfig.registerEvent, esdConfig.info));
-	if(!esd_->connect())
-		return false;
+	// Init Stream Deck
+	{
+		deck_.init(esdConfig.port, esdConfig.pluginUUID, esdConfig.registerEvent, esdConfig.info);
+		if(!deck_.connect())
+			return false;
 
-	connect(esd_.get(), &ESDPluginBase::keyDown, this, &Plugin::onKeyDown);
-	qDebug() << "Plugin initialized";
+		connect(&deck_, &QStreamDeckPlugin::keyDown, this, &Plugin::onKeyDown);
+	}
+
+	// Init Discord
+	{
+		if(!discord_.connect(914314199436509185))
+			return false;
+	}
+
 	return true;
 }
 
-void Plugin::onKeyDown(const ESDActionModel &action) {
+void Plugin::onKeyDown(const QStreamDeckAction &action) {
 	const QString a = action.action;
 
 	if(a == ActionType::openMixer)
-		esd_->switchProfile(action.deviceId, "Discord Volume Mixer");
+		deck_.switchProfile(action.deviceId, "Discord Volume Mixer");
 
 	else if(a == ActionType::closeMixer)
-		esd_->switchProfile(action.deviceId, "");
+		deck_.switchProfile(action.deviceId, "");
 
 	else if(a == ActionType::user) {
 
