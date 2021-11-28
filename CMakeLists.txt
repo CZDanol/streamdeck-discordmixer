@@ -55,6 +55,7 @@ target_include_directories(${target} PRIVATE SYSTEM
 # ===========================================
 file(GLOB_RECURSE discord_sdk_files CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/deps/discord_game_sdk/*.cpp")
 target_sources(${target} PRIVATE ${discord_sdk_files})
+target_include_directories(${target} PRIVATE SYSTEM "${PROJECT_SOURCE_DIR}/deps/discord_game_sdk")
 
 find_library(discord_sdk_lib NAMES discord_game_sdk.dll.lib PATHS "${PROJECT_SOURCE_DIR}/lib/${lib_platform_dir}" REQUIRED)
 target_link_libraries(${target} PRIVATE "${discord_sdk_lib}")

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" href="sdpi.css">
+    <title>Discord User Linkage</title>
+</head>
+<body>
+<div class="sdpi-wrapper">
+    <div class="sdpi-item">
+        <div class="sdpi-item-label">User index (index in the channel users list, indexed from 0)</div>
+        <span class="sdpi-item-value">
+                <input id="user_ix" inputmode="numeric" pattern="[0-9]*" type="number" placeholder="0" oninput="updateSettings('user_ix', event.target.value)" required>
+            </span>
+    </div>
+</div>
+<script>
+    // this is our global websocket, used to communicate from/to Stream Deck software
+    // and some info about our plugin, as sent by Stream Deck software
+    var websocket = null,
+        uuid = null,
+        actionInfo = {},
+        settings = {};
+
+    function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, inActionInfo) {
+        uuid = inUUID;
+        // please note: the incoming arguments are of type STRING, so
+        // in case of the inActionInfo, we must parse it into JSON first
+        actionInfo = JSON.parse(inActionInfo); // cache the info
+        websocket = new WebSocket('ws://localhost:' + inPort);
+
+        // if connection was established, the websocket sends
+        // an 'onopen' event, where we need to register our PI
+        websocket.onopen = function () {
+            var json = {
+                event: inRegisterEvent,
+                uuid: inUUID
+            };
+            // register property inspector to Stream Deck
+            websocket.send(JSON.stringify(json));
+        }
+
+        settings = actionInfo.payload.settings;
+        document.getElementById("user_ix").value = settings.user_ix ?? 0;
+    }
+
+    function updateSettings(key, value) {
+        settings[key] = value;
+
+        if (!websocket)
+            return;
+
+        {
+            const json = {
+                "action": actionInfo['action'],
+                "event": "sendToPlugin",
+                "context": uuid,
+                "payload": {
+                    [key]: value
+                }
+            };
+            websocket.send(JSON.stringify(json));
+        }
+
+        {
+            const json = {
+                "action": actionInfo['action'],
+                "event": "setSettings",
+                "context": uuid,
+                "payload": settings
+            };
+            websocket.send(JSON.stringify(json));
+        }
+    }
+</script>
+</body>
+</html>

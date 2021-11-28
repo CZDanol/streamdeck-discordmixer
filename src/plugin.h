@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ESDBasePlugin.h>
+#include <discord.h>
 
 using namespace std;
 
@@ -12,9 +13,24 @@ public:
 public:
 	virtual void KeyDownForAction(const std::string &inAction, const std::string &inContext, const json &inPayload, const std::string &inDeviceID) override;
 
+	virtual void WillAppearForAction(const string &inAction, const string &inContext, const json &inPayload, const string &inDeviceID) override;
+	virtual void WillDisappearForAction(const string &inAction, const string &inContext, const json &inPayload, const string &inDeviceID) override;
+
 private:
-	string action_, context_, device_;
-	json payload_;
+	void updateUserButton(const string &context);
+
+private:
+	unique_ptr<discord::Core> discord_;
+
+private:
+	int usersIxOffset_ = 0;
+
+private:
+	struct KeyData {
+		int x, y;
+		json settings;
+	};
+	std::unordered_map<string, KeyData> keyData_;
 
 };
 

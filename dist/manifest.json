@@ -34,6 +34,7 @@
           "ShowTitle": false
         }
       ],
+      "PropertyInspectorPath": "inspector/user.html",
       "Tooltip": "User button",
       "UUID": "cz.danol.discordmixer.user"
     }
