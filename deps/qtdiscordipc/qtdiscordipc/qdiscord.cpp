@@ -6,8 +6,12 @@
 #include <QFile>
 #include <QtNetworkAuth/QOAuth2AuthorizationCodeFlow>
 #include <QtNetworkAuth/QOAuthHttpServerReplyHandler>
-#include <QDesktopServices>
+#include <QHttpMultiPart>
 #include <QEventLoop>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QDesktopServices>
+#include <QUrlQuery>
 
 struct MessageHeader {
 	uint32_t opcode;
@@ -72,11 +76,11 @@ bool QDiscord::connect(const QString &clientID) {
 			oauth.setReplyHandler(replyHandler);
 			oauth.setAuthorizationUrl(QUrl("https://discord.com/api/oauth2/authorize"));
 			oauth.setAccessTokenUrl(QUrl("https://discord.com/api/oauth2/token"));
-			oauth.setClientIdentifierSharedKey(authCode);
 			oauth.setClientIdentifier(clientID);
-			oauth.setScope(scopes.join(' '));
 			oauth.setModifyParametersFunction([&](QAbstractOAuth::Stage, QMultiMap<QString, QVariant> *parameters) {
-				parameters->insert("redirect_uri", "https://localhost");
+				parameters->replace("code", authCode);
+				parameters->replace("redirect_uri", "http://localhost:1337/callback");
+				parameters->replace("scope", scopes.join(' '));
 			});
 
 			QObject::connect(&oauth, &QOAuth2AuthorizationCodeFlow::authorizeWithBrowser, [](const QUrl &url) {
@@ -113,6 +117,28 @@ bool QDiscord::connect(const QString &clientID) {
 			}
 
 			qWarning() << "OAUTH SUCCESS";
+
+		/*	QNetworkAccessManager nm;
+			QNetworkRequest req;
+			const QUrlQuery q{
+				{"client_id",     clientID},
+				{"client_secret", "code"},
+				{"code",          authCode},
+				{"scope",         scopes.join(' ')},
+				{"grant_type",    "authorization_code"},
+			};
+			QUrl url("https://discord.com/api/oauth2/token");
+			req.setUrl(url);
+			req.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+			auto r = nm.post(req, q.toString(QUrl::FullyEncoded).toUtf8());
+
+			QEventLoop l;
+			QObject::connect(r, &QNetworkReply::finished, &l, &QEventLoop::quit);
+
+			l.exec();
+
+			qDebug() << r->errorString() << r->readAll();
+			r->deleteLater();*/
 
 			/*if(!accessToken.isEmpty()) {
 				tokenFile.open(QIODevice::WriteOnly);
