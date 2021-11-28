@@ -6,6 +6,7 @@
 #include "button/button_open_mixer.h"
 #include "button/button_back.h"
 #include "button/button_user.h"
+#include "button/button_volume.h"
 
 Device::Device(Plugin &plugin, const QString &deviceID) : plugin(plugin), deviceID(deviceID) {
 
@@ -24,6 +25,8 @@ void Device::onAppear(const QStreamDeckAction &action) {
 		CTOR("cz.danol.discordmixer.back", Button_Back),
 
 		CTOR("cz.danol.discordmixer.user", Button_User),
+		CTOR("cz.danol.discordmixer.volumeup", Button_Volume),
+		CTOR("cz.danol.discordmixer.volumedown", Button_Volume),
 	};
 
 	if(auto ctor = ctors.value(action.action)) {
@@ -43,7 +46,7 @@ void Device::updateData() {
 
 	voiceStates.clear();
 	for(const auto &v: voiceChannelData["data"]["voice_states"].toArray())
-		voiceStates += v.toObject();
+		voiceStates += VoiceState::fromJson(v.toObject());
 
 	updateAllButtons();
 }
@@ -51,4 +54,9 @@ void Device::updateData() {
 void Device::updateAllButtons() {
 	for(Button *btn: buttons)
 		btn->update();
+}
+
+void Device::updateUserRelatedButtons(Device::UserIx userIx) {
+	for(auto it = userRelatedButtons.find(userIx), end = userRelatedButtons.end(); it != end && it.key() == userIx; it++)
+		it.value()->update();
 }

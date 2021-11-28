@@ -1,5 +1,7 @@
 #include "plugin.h"
 
+#include "button/button.h"
+
 bool Plugin::init(const ESDConfig &esdConfig) {
 	// Init Stream Deck
 	{
@@ -34,16 +36,6 @@ bool Plugin::init(const ESDConfig &esdConfig) {
 }
 
 void Plugin::onKeyDown(const QStreamDeckAction &action) {
-	const QString a = action.action;
-
-	if(a == ActionType::openMixer) {
-		deck.switchProfile(action.deviceId, "Discord Volume Mixer");
-		devices_[action.deviceId]->updateData();
-	}
-
-	else if(a == ActionType::closeMixer)
-		deck.switchProfile(action.deviceId, "");
-
-	else
-
+	if(auto btn = devices_[action.deviceId]->buttons.value(action.context))
+		btn->onPressed();
 }

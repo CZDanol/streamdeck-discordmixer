@@ -85,7 +85,6 @@
           "ShowTitle": false
         }
       ],
-      "PropertyInspectorPath": "inspector/user.html",
       "Tooltip": "Go to next page",
       "UUID": "cz.danol.discordmixer.nextpage"
     },
@@ -102,7 +101,6 @@
           "ShowTitle": false
         }
       ],
-      "PropertyInspectorPath": "inspector/user.html",
       "Tooltip": "Goto previous page",
       "UUID": "cz.danol.discordmixer.previouspage"
     }

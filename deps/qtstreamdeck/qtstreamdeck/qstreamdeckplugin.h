@@ -63,7 +63,7 @@ public slots:
 	void getSettings(const QString &context);
 	void getGlobalSettings(QJsonObject &context);
 	void openURL(const QString &url);
-	void setState(int &state, const QString &context);
+	void setState(int state, const QString &context);
 	void setTitle(const QString &title, const QString &context, ESDSDKTarget target = 0);
 	void setImage(const QString &base64Str, const QString &context, ESDSDKTarget target = 0);
 	void showAlert(const QString &context);

@@ -5,12 +5,15 @@
 
 #include <qtstreamdeck/qstreamdeckaction.h>
 
-#include "actiontype.h"
+#include "voice_state.h"
 
 class Plugin;
 class Button;
 
 class Device {
+
+public:
+	using UserIx = int;
 
 public:
 	Device(Plugin &plugin, const QString &deviceID);
@@ -23,6 +26,7 @@ public:
 public:
 	void updateData();
 	void updateAllButtons();
+	void updateUserRelatedButtons(UserIx userIx);
 
 public:
 	Plugin &plugin;
@@ -31,9 +35,7 @@ public:
 public:
 	QHash<QString, Button*> buttons;
 	QMultiHash<UserIx, Button*> userRelatedButtons;
-
-	/// Array of all users in the voice channel data
-	QList<QJsonObject> voiceStates;
+	QList<VoiceState> voiceStates;
 
 	/// Used in pagination
 	int userIxOffset = 0;

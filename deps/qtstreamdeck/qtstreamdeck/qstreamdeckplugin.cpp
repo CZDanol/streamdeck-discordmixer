@@ -214,7 +214,7 @@ void QStreamDeckPlugin::sendToPropertyInspector(const QString &action, const QSt
 	writeJSON(jsonObject);
 }
 
-void QStreamDeckPlugin::setState(int &state, const QString &context) {
+void QStreamDeckPlugin::setState(int state, const QString &context) {
 	QJsonObject jsonObject;
 
 	QJsonObject payload;
