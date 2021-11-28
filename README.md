@@ -1,10 +1,12 @@
 # Stream Deck Discord Mixer
 This is a plugin for Stream Deck that allows setting volume for individual users in Discord Voice chat.
 
-You can adjust the audio mixer panel to your needs, it's quite smart.
+You can adjust the audio mixer panel to your needs, it's quite moduler - you can move buttons around etc.
 
 My code is under MIT License.
 Tested on W10x64.
+
+Currently natively support only the 15-key deck. Though it should not be a big issue to create your own deck.
 
 ## Configuration
 1. Download and install the plugin.
