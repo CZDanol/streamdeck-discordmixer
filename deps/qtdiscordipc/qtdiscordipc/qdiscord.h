@@ -15,7 +15,7 @@ public:
 	/**
 	 * Tries to connext to the Discord. Returns true if successfull (this function is blocking)
 	 */
-	bool connect(const QString &clientID);
+	bool connect(const QString &clientID, const QString &clientSecret);
 
 	void disconnect();
 

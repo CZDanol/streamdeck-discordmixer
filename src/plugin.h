@@ -2,9 +2,12 @@
 
 #include <QString>
 #include <QScopedPointer>
+#include <QSharedPointer>
 
 #include <qtstreamdeck/qstreamdeckplugin.h>
 #include <qtdiscordipc/qdiscord.h>
+
+#include "device.h"
 
 struct ESDConfig {
 	int port;
@@ -19,11 +22,14 @@ class Plugin : public QObject {
 public:
 	bool init(const ESDConfig &esdConfig);
 
+public:
+	QStreamDeckPlugin deck;
+	QDiscord discord;
+
 private slots:
 	void onKeyDown(const QStreamDeckAction &action);
 
 private:
-	QStreamDeckPlugin deck_;
-	QDiscord discord_;
+	QHash<QString, QSharedPointer<Device>> devices_;
 
 };

@@ -25,7 +25,7 @@ QDiscord::QDiscord() {
 	});
 }
 
-bool QDiscord::connect(const QString &clientID) {
+bool QDiscord::connect(const QString &clientID, const QString &clientSecret) {
 	const bool r = [&]() {
 		// start connecting
 		socket_.connectToServer("discord-ipc-0");
@@ -52,8 +52,16 @@ bool QDiscord::connect(const QString &clientID) {
 			}
 		}
 
+		QJsonObject oauthData;
+		QFile oauthFile("discordOauth.json");
+		if(oauthFile.exists()) {
+			oauthFile.open(QIODevice::ReadOnly);
+			oauthData = QJsonDocument::fromJson(oauthFile.readAll()).object();
+			oauthFile.close();
+		}
+
 		// Send authorization request
-		if(true) {
+		if(oauthData["access_token"].isNull()) {
 			const QJsonObject msg = sendCommandAndGetResponse("AUTHORIZE", QJsonObject{
 				{"client_id", clientID},
 				{"scopes",    QJsonArray::fromStringList(scopes)}
@@ -66,120 +74,53 @@ bool QDiscord::connect(const QString &clientID) {
 
 			const QString authCode = msg["data"].toObject()["code"].toString();
 
-			QOAuth2AuthorizationCodeFlow oauth;
-
-			QEventLoop evl;
-
-			class ReplyHandler : public QOAuthHttpServerReplyHandler {
-			public:
-				ReplyHandler(int port, QObject *parent) : QOAuthHttpServerReplyHandler(port, parent) {
-
-				}
-
-			protected:
-				virtual void networkReplyFinished(QNetworkReply *reply) override {
-					qDebug() << "REPLY" << reply->readAll();
-				}
+			QNetworkAccessManager nm;
+			QNetworkRequest req;
+			const QUrlQuery q{
+				{"client_id",     clientID},
+				{"client_secret", clientSecret},
+				{"code",          authCode},
+				{"scope",         scopes.join(' ')},
+				{"grant_type",    "authorization_code"},
 			};
+			QUrl url("https://discord.com/api/oauth2/token");
+			req.setUrl(url);
+			req.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+			auto r = nm.post(req, q.toString(QUrl::FullyEncoded).toUtf8());
 
-			QOAuthHttpServerReplyHandler *replyHandler = new ReplyHandler(1337, this);
-			replyHandler->setCallbackPath("callback");
+			QEventLoop l;
+			QObject::connect(r, &QNetworkReply::finished, &l, &QEventLoop::quit);
 
-			oauth.setReplyHandler(replyHandler);
-			oauth.setAuthorizationUrl(QUrl(QStringLiteral("https://discord.com/api/oauth2/authorize?code=%1").arg(authCode)));
-			oauth.setAccessTokenUrl(QUrl("https://discord.com/api/oauth2/token"));
-			oauth.setClientIdentifier(clientID);
-			oauth.setScope(scopes.join(' '));
-			oauth.setClientIdentifierSharedKey("SzXpJsT64jvZZINODArVirIYY-BkVepl");
-			//oauth.setClientIdentifierSharedKey(authCode);
-			oauth.setModifyParametersFunction([&](QAbstractOAuth::Stage, QMultiMap<QString, QVariant> *parameters) {
-				//parameters->replace("code", authCode);
-				parameters->replace("redirect_uri", "http://localhost:1337/callback");
-			});
+			l.exec();
+			r->deleteLater();
 
-			QObject::connect(replyHandler, &QOAuthHttpServerReplyHandler::replyDataReceived, [](const auto &d) {
-				qDebug() << "REPLY" << d;
-			});
-			QObject::connect(&oauth, &QOAuth2AuthorizationCodeFlow::authorizeWithBrowser, [](const QUrl &url) {
-				qDebug() << "Auth with browser";
-				QDesktopServices::openUrl(url);
-			});
-			QObject::connect(&oauth, &QOAuth2AuthorizationCodeFlow::statusChanged, &evl, [&](QAbstractOAuth::Status status) {
-				qDebug() << "Status change" << static_cast<int>(status);
-
-				if(status == QAbstractOAuth::Status::Granted)
-					evl.quit();
-			});
-			QObject::connect(&oauth, &QOAuth2AuthorizationCodeFlow::error, &evl, [&](const QString &err, const QString &desc, const QUrl &url) {
-				qWarning() << "OAUTH error" << err << desc << url;
-				evl.quit();
-			});
-
-			oauth.grant();
-
-			// Timeout timer
-			QTimer t;
-			t.setInterval(300000);
-			t.setSingleShot(true);
-			t.start();
-			QObject::connect(&t, &QTimer::timeout, &evl, &QEventLoop::quit);
-
-			qDebug() << "OAUTH evl start";
-
-			evl.exec();
-
-			if(oauth.status() != QAbstractOAuth::Status::Granted) {
-				qWarning() << "Failed OAuth";
+			if(r->error() != QNetworkReply::NoError) {
+				qWarning() << "QDiscord Network error" << r->errorString();
 				return false;
 			}
 
-			qWarning() << "OAUTH SUCCESS";
+			oauthData = QJsonDocument::fromJson(r->readAll()).object();
+			if(oauthData["access_token"].toString().isEmpty()) {
+				qWarning() << "QDiscord failed to obtain access token";
+				return false;
+			}
 
-			/*	QNetworkAccessManager nm;
-				QNetworkRequest req;
-				const QUrlQuery q{
-					{"client_id",     clientID},
-					{"client_secret", "code"},
-					{"code",          authCode},
-					{"scope",         scopes.join(' ')},
-					{"grant_type",    "authorization_code"},
-				};
-				QUrl url("https://discord.com/api/oauth2/token");
-				req.setUrl(url);
-				req.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
-				auto r = nm.post(req, q.toString(QUrl::FullyEncoded).toUtf8());
-
-				QEventLoop l;
-				QObject::connect(r, &QNetworkReply::finished, &l, &QEventLoop::quit);
-
-				l.exec();
-
-				qDebug() << r->errorString() << r->readAll();
-				r->deleteLater();*/
-
-			/*if(!accessToken.isEmpty()) {
-				tokenFile.open(QIODevice::WriteOnly);
-				tokenFile.write(accessToken.toUtf8());
-				tokenFile.close();
-			}*/
+			{
+				oauthFile.open(QIODevice::WriteOnly);
+				oauthFile.write(QJsonDocument(oauthData).toJson(QJsonDocument::Compact));
+				oauthFile.close();
+			}
 		}
 
-		// Try reauthenticating if we already have auth token
-		QFile tokenFile("discordAccessToken.txt");
-		bool isAuthorized = false;
-		if(tokenFile.exists()) {
-			tokenFile.open(QIODevice::ReadOnly);
-			QString accessToken = tokenFile.readAll();
-			tokenFile.close();
+		// Authenticate
+		{
+			const QJsonObject msg = sendCommandAndGetResponse("AUTHENTICATE", QJsonObject{
+				{"access_token", oauthData["access_token"].toString()}
+			});
 
-			if(!accessToken.isEmpty()) {
-				const QJsonObject msg = sendCommandAndGetResponse("AUTHENTICATE", QJsonObject{
-					{"access_token", accessToken}
-				});
-
-				if(msg["CMD"] != "AUTHORIZE")
-					return false;
-
+			if(msg["cmd"] != "AUTHENTICATE") {
+				qWarning() << "QDiscord expected AUTHENTICATE";
+				return false;
 			}
 		}
 
