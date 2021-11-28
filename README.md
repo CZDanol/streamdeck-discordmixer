@@ -5,9 +5,6 @@ This is a plugin for Stream Deck that allows setting volume for individual users
 * Tested on W10x64.
 * Currently natively support only the 15-key deck. Though it should not be a big issue to create your own deck.
 
-## Donation
-If you feel like giving me some money, you can use [PayPal](https://www.paypal.com/donate/?hosted_button_id=QZC5P67TBTRX6).
-
 ## Configuration
 1. Download and install the plugin.
 2. Add the "Discord Volume Mixer" button on your deck.
@@ -23,3 +20,6 @@ If you feel like giving me some money, you can use [PayPal](https://www.paypal.c
 * I copied a bunch of Stream Deck control functionality from [fredemmott](https://github.com/fredemmott/StreamDeck-CPPSDK), though I adjusted it.
 * Icons8 icons
 * Communicates with Discord via IPC through QLocalSocket.
+
+## Donations
+If you feel like giving me some money, you can use [PayPal](https://www.paypal.com/donate/?hosted_button_id=QZC5P67TBTRX6).
