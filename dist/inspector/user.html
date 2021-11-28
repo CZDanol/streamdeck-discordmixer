@@ -3,16 +3,20 @@
 <head>
     <meta charset="utf-8"/>
     <link rel="stylesheet" href="sdpi.css">
+    <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui,viewport-fit=cover">
+    <meta name=apple-mobile-web-app-capable content=yes>
+    <meta name=apple-mobile-web-app-status-bar-style content=black>
     <title>Discord User Linkage</title>
 </head>
 <body>
 <div class="sdpi-wrapper">
     <div class="sdpi-item">
-        <div class="sdpi-item-label">User index (index in the channel users list, indexed from 0)</div>
-        <span class="sdpi-item-value">
-                <input id="user_ix" inputmode="numeric" pattern="[0-9]*" type="number" placeholder="0" oninput="updateSettings('user_ix', event.target.value)" required>
-            </span>
+        <div class="sdpi-item-label">User index</div>
+        <input class="sdpi-item-value" id="user_ix" inputmode="numeric" pattern="[0-9]*" type="number" placeholder="0" oninput="updateSettings('user_ix', event.target.value)" required>
     </div>
+    <details class="message">
+        <summary>Index in the channel users list, indexed from 0.</summary>
+    </details>
 </div>
 <script>
     // this is our global websocket, used to communicate from/to Stream Deck software

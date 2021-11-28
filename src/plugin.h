@@ -2,6 +2,7 @@
 
 #include <ESDBasePlugin.h>
 #include <discord.h>
+#include <fstream>
 
 using namespace std;
 
@@ -21,6 +22,7 @@ private:
 
 private:
 	unique_ptr<discord::Core> discord_;
+	ofstream log_;
 
 private:
 	int usersIxOffset_ = 0;
