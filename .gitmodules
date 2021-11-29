@@ -1,0 +1,3 @@
+[submodule "deps/qtdiscordipc"]
+	path = deps/qtdiscordipc
+	url = https://github.com/CZDanol/QtDiscordIPC
