@@ -5,6 +5,8 @@ This is a plugin for Stream Deck that allows setting volume for individual users
 * Tested on W10x64.
 * Currently natively support only the 15-key deck. Though it should not be a big issue to create your own deck.
 
+![](etc/sshot.png)
+
 ## Configuration
 1. Download and install the plugin.
 2. Add the "Discord Volume Mixer" button on your deck.
