@@ -24,5 +24,8 @@ This is a plugin for Stream Deck that allows setting volume for individual users
 * Icons8 icons
 * Communicates with Discord via IPC through QLocalSocket.
 
+## TODO
+* Add support for the S and XL variants of stream deck (it's just a matter of creating a profiles for them).
+
 ## Donations
 If you feel like giving me some money, you can use [PayPal](https://www.paypal.com/donate/?hosted_button_id=QZC5P67TBTRX6).
