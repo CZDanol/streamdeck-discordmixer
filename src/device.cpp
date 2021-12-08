@@ -81,17 +81,25 @@ void Device::onDiscordMessage(const QJsonObject &msg) {
 		updateData();
 	}
 
-	else if(evt == "VOICE_STATE_CREATE" || evt == "VOICE_STATE_UPDATE") {
+	else if(evt == "VOICE_STATE_CREATE") {
 		const auto vs = VoiceState::fromJson(msg["data"].toObject());
 		if(vs.userID != plugin.discord.userID()) {
-			voiceStates.insert(vs.nick, vs);
+			voiceStates.insert(vs.userID, vs);
+			updateAllButtons();
+		}
+	}
+
+	else if(evt == "VOICE_STATE_UPDATE") {
+		const auto vs = VoiceState::fromJson(msg["data"].toObject());
+		if(voiceStates.contains(vs.userID)) {
+			voiceStates.insert(vs.userID, vs);
 			updateAllButtons();
 		}
 	}
 
 	else if(evt == "VOICE_STATE_DELETE") {
 		const auto vs = VoiceState::fromJson(msg["data"].toObject());
-		voiceStates.remove(vs.nick);
+		voiceStates.remove(vs.userID);
 		updateAllButtons();
 	}
 }
@@ -107,7 +115,7 @@ void Device::updateData() {
 	for(const auto &v: voiceChannelData["data"]["voice_states"].toArray()) {
 		const VoiceState vs = VoiceState::fromJson(v.toObject());
 		if(vs.userID != plugin.discord.userID())
-			voiceStates.insert(vs.nick, vs);
+			voiceStates.insert(vs.userID, vs);
 	}
 
 	updateAllButtons();
