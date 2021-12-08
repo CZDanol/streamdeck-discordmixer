@@ -5,6 +5,8 @@ This is a plugin for Stream Deck that allows setting volume for individual users
 * Tested on W10x64.
 * Currently natively support only the 15-key deck. Though it should not be a big issue to create your own deck.
 
+If you have some feedback, feel free to contact Danol on the [Stream Deck Labs Discord server](https://discord.com/invite/294BQE6Xdp).
+
 ![](etc/sshot.png)
 
 ## Configuration
