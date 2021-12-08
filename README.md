@@ -28,6 +28,7 @@ If you have some feedback, ask around on [Stream Deck Labs Discord server](https
 
 ## TODO
 * Add support for the S and XL variants of stream deck (it's just a matter of creating a profiles for them).
+* Maybe support discord icons? =3
 
 ## Donations
 If you feel like giving me some money, you can use [PayPal](https://www.paypal.com/donate/?hosted_button_id=QZC5P67TBTRX6).

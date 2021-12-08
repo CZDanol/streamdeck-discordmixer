@@ -11,10 +11,10 @@ void Button_User::update() {
 	const QString volumeStr = state.muted ? "MUTED" : QStringLiteral("%1 %").arg(QString::number(state.volume));
 	const QString newTitle = is ? QStringLiteral("%1\n\n%2").arg(state.nick, volumeStr) : QString();
 
-	if(currentTitle_ == newTitle)
+	if(title == newTitle)
 		return;
 
-	currentTitle_ = newTitle;
+	title = newTitle;
 	device.plugin.deck.setTitle(newTitle, context, kESDSDKTarget_HardwareAndSoftware);
 }
 

@@ -13,8 +13,8 @@ public:
 public:
 	virtual void update() override;
 
-private:
-	QString currentTitle_;
+public:
+	QString title;
 
 };
 
