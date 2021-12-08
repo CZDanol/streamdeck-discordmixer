@@ -70,14 +70,44 @@ void Device::onSendToPlugin(const QStreamDeckAction &action) {
 	delete btn;
 }
 
+void Device::onDiscordMessage(const QJsonObject &msg) {
+	if(msg["cmd"] != "DISPATCH")
+		return;
+
+	const QString evt = msg["evt"].toString();
+
+	// Update everything when voice channel is changed
+	if(evt == "VOICE_CHANNEL_SELECT") {
+		updateData();
+	}
+
+	else if(evt == "VOICE_STATE_CREATE" || evt == "VOICE_STATE_UPDATE") {
+		const auto vs = VoiceState::fromJson(msg["data"].toObject());
+		if(vs.userID != plugin.discord.userID()) {
+			voiceStates.insert(vs.nick, vs);
+			updateAllButtons();
+		}
+	}
+
+	else if(evt == "VOICE_STATE_DELETE") {
+		const auto vs = VoiceState::fromJson(msg["data"].toObject());
+		voiceStates.remove(vs.nick);
+		updateAllButtons();
+	}
+}
+
 void Device::updateData() {
 	const QJsonObject voiceChannelData = plugin.discord.sendCommand("GET_SELECTED_VOICE_CHANNEL", {});
 
+	const QString channelId = voiceChannelData["data"]["id"].toString();
+	if(!channelId.isEmpty())
+		plugin.subscribeVoiceEvents(channelId);
+
 	voiceStates.clear();
 	for(const auto &v: voiceChannelData["data"]["voice_states"].toArray()) {
-		VoiceState vs = VoiceState::fromJson(v.toObject());
+		const VoiceState vs = VoiceState::fromJson(v.toObject());
 		if(vs.userID != plugin.discord.userID())
-			voiceStates += VoiceState::fromJson(v.toObject());
+			voiceStates.insert(vs.nick, vs);
 	}
 
 	updateAllButtons();

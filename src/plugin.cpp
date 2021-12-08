@@ -44,5 +44,41 @@ bool Plugin::init(const ESDConfig &esdConfig) {
 		});
 	}
 
+	// Setup discord
+	{
+		connect(&discord, &QDiscord::connected, this, [this] {
+			discord.sendCommand("SUBSCRIBE", {}, {
+				{"evt", "VOICE_CHANNEL_SELECT"}
+			});
+		});
+		connect(&discord, &QDiscord::messageReceived, this, [this](const QJsonObject &msg) {
+			for(const auto &d: devices_)
+				d->onDiscordMessage(msg);
+
+			const QString evt = msg["evt"].toString();
+			if(evt == "VOICE_CHANNEL_SELECT")
+				subscribeVoiceEvents(msg["data"]["channel_id"].toString());
+		});
+	}
+
 	return true;
+}
+
+void Plugin::subscribeVoiceEvents(const QString &channelId) {
+	if(channelId.isNull())
+		return;
+
+	const QJsonObject args{
+		{"channel_id", channelId}
+	};
+
+	discord.sendCommand("SUBSCRIBE", args, {
+		{"evt", "VOICE_STATE_UPDATE"}
+	});
+	discord.sendCommand("SUBSCRIBE", args, {
+		{"evt", "VOICE_STATE_CREATE"}
+	});
+	discord.sendCommand("SUBSCRIBE", args, {
+		{"evt", "VOICE_STATE_DELETE"}
+	});
 }

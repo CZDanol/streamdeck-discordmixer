@@ -12,6 +12,7 @@ public:
 	QString nick;
 	QString userID;
 	int volume;
+	bool muted;
 
 };
 

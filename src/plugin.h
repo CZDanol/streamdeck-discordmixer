@@ -23,6 +23,9 @@ public:
 	bool init(const ESDConfig &esdConfig);
 
 public:
+	void subscribeVoiceEvents(const QString &channelId);
+
+public:
 	QStreamDeckPlugin deck;
 	QDiscord discord;
 

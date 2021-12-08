@@ -23,6 +23,7 @@ public:
 	void onAppear(const QStreamDeckAction &action);
 	void onDisappear(const QStreamDeckAction &action);
 	void onSendToPlugin(const QStreamDeckAction &action);
+	void onDiscordMessage(const QJsonObject &msg);
 
 public:
 	void updateData();
@@ -36,7 +37,7 @@ public:
 public:
 	QHash<QString, Button*> buttons;
 	QMultiHash<UserIx, Button*> userRelatedButtons;
-	QList<VoiceState> voiceStates;
+	QMap<QString, VoiceState> voiceStates;
 
 	/// Used in pagination
 	int userIxOffset = 0;

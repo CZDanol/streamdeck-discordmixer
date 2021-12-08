@@ -8,7 +8,13 @@ public:
 	Button_User(const CtorData &d);
 
 public:
+	virtual void onPressed() override;
+
+public:
 	virtual void update() override;
+
+private:
+	QString currentTitle_;
 
 };
 

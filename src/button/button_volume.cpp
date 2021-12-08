@@ -12,7 +12,7 @@ VoiceState *Button_Volume::voiceState() {
 	if(ix >= device.voiceStates.size())
 		return nullptr;
 
-	return &device.voiceStates[ix];
+	return &device.voiceStates[device.voiceStates.keys()[ix]];
 }
 
 void Button_Volume::update() {
@@ -31,16 +31,18 @@ void Button_Volume::onPressed() {
 	if(!s)
 		return;
 
-	const int newVolume = qBound(minVolume, s->volume + step, maxVolume);
+	const int newVolume = static_cast<int>(qRound(static_cast<float>(qBound(minVolume, s->volume + step, maxVolume)) / step) * step);
 	if(newVolume == s->volume)
 		return;
 
 	s->volume = newVolume;
+	s->muted = false;
 	state = -1;
 
 	device.plugin.discord.sendCommand("SET_USER_VOICE_SETTINGS", {
 		{"user_id", s->userID},
-		{"volume",  newVolume}
+		{"volume",  newVolume},
+		{"mute",    false}
 	});
 	device.updateUserRelatedButtons(userIx);
 }
