@@ -1,3 +1,6 @@
 [submodule "deps/qtdiscordipc"]
 	path = deps/qtdiscordipc
 	url = https://github.com/CZDanol/QtDiscordIPC
+[submodule "deps/qtstreamdeck/qtstreamdeck"]
+	path = deps/qtstreamdeck/qtstreamdeck
+	url = https://github.com/CZDanol/QtStreamDeck/

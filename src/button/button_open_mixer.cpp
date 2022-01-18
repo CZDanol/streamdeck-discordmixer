@@ -14,8 +14,8 @@ void Button_OpenMixer::onPressed() {
 
 	static const QMap<int, QString> profileNameByDeviceType {
 		{0, "Discord Volume Mixer"},
-		{1, "Discord Volume Mixer (Mini)"},
-		{2, "Discord Volume Mixer (XL)"}
+		{1, "Discord Volume Mixer Mini"},
+		{2, "Discord Volume Mixer XL"}
 	};
 
 	device.plugin.deck.switchProfile(device.deviceID, profileNameByDeviceType.value(device.deviceInfo["type"].toInt()));
