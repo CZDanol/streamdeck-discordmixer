@@ -35,7 +35,7 @@ Button *createButton(Device *dev, const Button::CtorData &d) {
 	return btn;
 }
 
-Device::Device(Plugin &plugin, const QString &deviceID) : plugin(plugin), deviceID(deviceID) {
+Device::Device(Plugin &plugin, const QString &deviceID, const QJsonObject &deviceInfo) : plugin(plugin), deviceID(deviceID), deviceInfo(deviceInfo) {
 
 }
 

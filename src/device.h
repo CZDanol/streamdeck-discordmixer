@@ -16,7 +16,7 @@ public:
 	using UserIx = int;
 
 public:
-	Device(Plugin &plugin, const QString &deviceID);
+	Device(Plugin &plugin, const QString &deviceID, const QJsonObject &deviceInfo);
 	~Device();
 
 public:
@@ -33,6 +33,7 @@ public:
 public:
 	Plugin &plugin;
 	const QString deviceID;
+	const QJsonObject deviceInfo;
 
 public:
 	QHash<QString, Button*> buttons;

@@ -124,6 +124,18 @@
       "DeviceType": 0,
       "ReadOnly": false,
       "DontAutoSwitchWhenInstalled": true
+    },
+    {
+      "Name": "Discord Volume Mixer (XL)",
+      "DeviceType": 2,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": true
+    },
+    {
+      "Name": "Discord Volume Mixer (Mini)",
+      "DeviceType": 1,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": true
     }
   ],
   "OS": [
