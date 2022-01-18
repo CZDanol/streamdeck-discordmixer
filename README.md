@@ -3,7 +3,7 @@ This is a plugin for Stream Deck that allows setting volume for individual users
 
 * You can adjust the audio mixer panel to your needs, it's quite modular - you can move buttons around etc.
 * Tested on W10x64.
-* Currently natively support only the 15-key deck. Though it should not be a big issue to create your own deck.
+* Supports Standard, Mini and XL Decks.
 
 If you have some feedback, ask around on [Stream Deck Labs Discord server](https://discord.com/invite/294BQE6Xdp) on the `#danols-plugin-support` channel.
 
