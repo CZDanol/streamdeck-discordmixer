@@ -7,6 +7,8 @@ This is a plugin for Stream Deck that allows setting volume for individual users
 
 If you have some feedback, ask around on [Stream Deck Labs Discord server](https://discord.com/invite/294BQE6Xdp) on the `#danols-plugin-support` channel.
 
+Also special thanks to Krabs for helping me out :)
+
 ![](etc/sshot.png)
 
 ## Configuration
@@ -18,6 +20,9 @@ If you have some feedback, ask around on [Stream Deck Labs Discord server](https
 6. From the OAuth2 tab, copy `Client ID` and `Client secret` and paste it in the deck button details.
 7. Click on the deck button. Discord will ask you for some permissions & firewall and stuff.
 8. Done.
+
+
+**Don't play with the configuration of the buttons in the Volume Mixer profile unless you know what you're doing.**
 
 ## Third-party libraries & stuff
 * Qt 6 (tested on Qt 6.2.1 MSVC 2019 Win x64)
