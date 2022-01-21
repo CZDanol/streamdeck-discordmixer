@@ -9,7 +9,12 @@ void Button_User::update() {
 	const bool is = !state.nick.isEmpty();
 
 	const QString volumeStr = state.muted ? "MUTED" : QStringLiteral("%1 %").arg(QString::number(state.volume));
-	const QString newTitle = is ? QStringLiteral("%1\n%3\n%2").arg(state.nick, volumeStr, state.speaking ? "^^^^" : "") : device.voiceStates.isEmpty() ? QString("NOBODY IN\nVOICE CHAT") : QString();
+
+	QString newTitle;
+	if(is)
+		newTitle = QStringLiteral("%1\n%3\n%2").arg(state.nick, volumeStr, state.speaking ? "^^^^^^^^" : "");
+	else if(device.voiceStates.isEmpty())
+		newTitle = QString("NOBODY IN\nVOICE CHAT");
 
 	if(title == newTitle)
 		return;

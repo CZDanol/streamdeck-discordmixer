@@ -28,6 +28,7 @@ public:
 public:
 	QStreamDeckPlugin deck;
 	QDiscord discord;
+	QString curentDiscordChannelID;
 
 private:
 	QHash<QString, QSharedPointer<Device>> devices_;

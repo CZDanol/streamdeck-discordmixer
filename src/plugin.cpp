@@ -65,26 +65,21 @@ bool Plugin::init(const ESDConfig &esdConfig) {
 }
 
 void Plugin::subscribeVoiceEvents(const QString &channelId) {
-	if(channelId.isNull())
-		return;
-
-	const QJsonObject args{
-		{"channel_id", channelId}
+	static const QStringList events{
+		"VOICE_STATE_UPDATE", "VOICE_STATE_CREATE", "VOICE_STATE_DELETE", "SPEAKING_START", "SPEAKING_STOP"
 	};
 
-	discord.sendCommand("SUBSCRIBE", args, {
-		{"evt", "VOICE_STATE_UPDATE"}
-	});
-	discord.sendCommand("SUBSCRIBE", args, {
-		{"evt", "VOICE_STATE_CREATE"}
-	});
-	discord.sendCommand("SUBSCRIBE", args, {
-		{"evt", "VOICE_STATE_DELETE"}
-	});
-	discord.sendCommand("SUBSCRIBE", args, {
-		{"evt", "SPEAKING_START"}
-	});
-	discord.sendCommand("SUBSCRIBE", args, {
-		{"evt", "SPEAKING_STOP"}
-	});
+	auto f = [&](const QString &cmd) {
+		const QJsonObject args{{"channel_id", curentDiscordChannelID}};
+		for(const QString &e: events)
+			discord.sendCommand(cmd, args, {{"evt", e}});
+	};
+
+	if(!curentDiscordChannelID.isNull())
+		f("UNSUBSCRIBE");
+
+	curentDiscordChannelID = channelId;
+
+	if(!curentDiscordChannelID.isNull())
+		f("SUBSCRIBE");
 }

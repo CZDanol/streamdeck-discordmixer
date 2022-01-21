@@ -54,7 +54,7 @@ void Button_Page::update() {
 
 	int hide;
 	if(device.prevPageButtons == 0 || device.nextPageButtons == 0)
-		hide = (p.pageCount == 0);
+		hide = (p.pageCount < 2);
 	else
 		hide = (step < 0) ? (p.currentPage <= 0) : (p.currentPage >= p.pageCount - 1);
 

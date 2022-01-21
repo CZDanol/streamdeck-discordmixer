@@ -7,7 +7,7 @@ This is a plugin for Stream Deck that allows setting volume for individual users
 
 If you have some feedback, ask around on [Stream Deck Labs Discord server](https://discord.com/invite/294BQE6Xdp) on the `#danols-plugin-support` channel.
 
-Also special thanks to Krabs for helping me out :)
+Also cudos to Krabs for helping me out :)
 
 ![](etc/sshot.png)
 
@@ -28,12 +28,11 @@ Also special thanks to Krabs for helping me out :)
 * Qt 6 (tested on Qt 6.2.1 MSVC 2019 Win x64)
 * I copied a bunch of Stream Deck control functionality from [alexandarZ / ElgatoStreamDeck-QtPluginBase](https://github.com/alexandarZ/ElgatoStreamDeck-QtPluginBase), though I adjusted it.
 * Uses my [QtDiscordIPC](https://github.com/CZDanol/QtDiscordIPC/) for Discord control.
-* Icons8 icons
+* [Icons8 icons](https://icons8.com/)
 * Communicates with Discord via IPC through QLocalSocket.
 
 ## TODO
-* Add support for the S and XL variants of stream deck (it's just a matter of creating a profiles for them).
-* Maybe support discord icons? =3
+* Maybe support discord user icons? =3
 
 ## Donations
 If you feel like giving me some money, you can use [PayPal](https://www.paypal.com/donate/?hosted_button_id=QZC5P67TBTRX6).

@@ -78,12 +78,10 @@
       "Name": "[DVM] Next page",
       "States": [
         {
-          "Image": "icons/icons8_forward_72px",
-          "ShowTitle": false
+          "Image": "icons/icons8_forward_72px"
         },
         {
-          "Image": "icons/noicon",
-          "ShowTitle": false
+          "Image": "icons/noicon"
         }
       ],
       "Tooltip": "Go to next page",
@@ -95,12 +93,10 @@
       "Name": "[DVM] Previous page",
       "States": [
         {
-          "Image": "icons/icons8_back_72px",
-          "ShowTitle": false
+          "Image": "icons/icons8_back_72px"
         },
         {
-          "Image": "icons/noicon",
-          "ShowTitle": false
+          "Image": "icons/noicon"
         }
       ],
       "Tooltip": "Goto previous page",
