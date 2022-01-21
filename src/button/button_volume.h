@@ -1,5 +1,7 @@
 #pragma once
 
+#include <QTimer>
+
 #include "button_user_related.h"
 
 class Button_Volume : public Button_UserRelated {
@@ -18,8 +20,14 @@ public:
 	virtual void onReleased() override;
 
 public:
+	void trigger();
+
+public:
 	int step;
 	int state = -1;
+
+	int repeatSkip = 0;
+	QTimer repeatTimer;
 
 };
 

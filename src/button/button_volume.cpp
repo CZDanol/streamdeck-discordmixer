@@ -5,6 +5,12 @@ static constexpr int maxVolume = 200;
 
 Button_Volume::Button_Volume(const Button::CtorData &d) : Button_UserRelated(d) {
 	step = (d.action == "cz.danol.discordmixer.volumeup" ? 1 : -1) * 10;
+
+	repeatTimer.setInterval(100);
+	repeatTimer.callOnTimeout([this] {
+		if(repeatSkip-- <= 0)
+			trigger();
+	});
 }
 
 VoiceState *Button_Volume::voiceState() {
@@ -27,6 +33,19 @@ void Button_Volume::update() {
 }
 
 void Button_Volume::onPressed() {
+	/// Ignore first 300 ms
+	repeatSkip = 3;
+	trigger();
+	repeatTimer.start();
+}
+
+void Button_Volume::onReleased() {
+	repeatTimer.stop();
+	state = -1;
+	update();
+}
+
+void Button_Volume::trigger() {
 	VoiceState *s = voiceState();
 	if(!s)
 		return;
@@ -45,9 +64,4 @@ void Button_Volume::onPressed() {
 		{"mute",    false}
 	});
 	device.updateButtons();
-}
-
-void Button_Volume::onReleased() {
-	state = -1;
-	update();
 }
