@@ -2,20 +2,46 @@
 
 Button_Page::Button_Page(const Button::CtorData &d) : Button(d) {
 	step = (d.action == "cz.danol.discordmixer.nextpage" ? 1 : -1) * d.payload["settings"]["step"].toString().toInt();
+	(step > 0 ? device.nextPageButtons : device.prevPageButtons)++;
+}
+
+Button_Page::~Button_Page() {
+	(step > 0 ? device.nextPageButtons : device.prevPageButtons)--;
+}
+
+auto computeParams(Button_Page &b) {
+	struct R {
+		int pageCount;
+		int currentPage;
+		int maxOffset;
+	};
+
+	const int stepAbs = qAbs(b.step);
+
+	R r;
+	r.pageCount = static_cast<int>(b.device.voiceStates.size() + stepAbs - 1) / stepAbs;
+	r.currentPage = b.device.userIxOffset / stepAbs;
+	r.maxOffset = (r.pageCount - 1) * stepAbs;
+	return r;
 }
 
 void Button_Page::onPressed() {
-	const int stepAbs = qAbs(step);
-	const int newOffset = qBound(0, device.userIxOffset + step, (device.voiceStates.size() + stepAbs - 1) / stepAbs);
+	const auto p = computeParams(*this);
 
-	qDebug() << "Pressed page button" << step << stepAbs << device.userIxOffset << newOffset << device.voiceStates.size();
+	int newOffset = device.userIxOffset + step;
+	if(newOffset > p.maxOffset)
+		newOffset = 0;
+	else if(newOffset < 0)
+		newOffset = p.maxOffset;
+
+	qDebug() << "Pressed page button" << step << device.userIxOffset << newOffset << device.voiceStates.size();
 
 	if(device.userIxOffset == newOffset)
 		return;
 
 	state = -1;
 	device.userIxOffset = newOffset;
-	device.updateAllButtons();
+	device.updateButtons();
 }
 
 void Button_Page::onReleased() {
@@ -24,11 +50,23 @@ void Button_Page::onReleased() {
 }
 
 void Button_Page::update() {
-	const int targetState = (step < 0) ? (device.userIxOffset == 0) : (device.userIxOffset + step >= device.voiceStates.size());
+	const auto p = computeParams(*this);
 
-	if(state == targetState)
-		return;
+	int hide;
+	if(device.prevPageButtons == 0 || device.nextPageButtons == 0)
+		hide = (p.pageCount == 0);
+	else
+		hide = (step < 0) ? (p.currentPage <= 0) : (p.currentPage >= p.pageCount - 1);
 
-	state = targetState;
-	device.plugin.deck.setState(targetState, context);
+	QString targetTitle = hide ? "" : QStringLiteral("%1/%2").arg(p.currentPage + 1).arg(p.pageCount);
+
+	if(state != hide) {
+		state = hide;
+		device.plugin.deck.setState(hide, context);
+	}
+
+	if(title != targetTitle) {
+		title = targetTitle;
+		device.plugin.deck.setTitle(targetTitle, context, kESDSDKTarget_HardwareAndSoftware);
+	}
 }

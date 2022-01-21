@@ -44,7 +44,7 @@ void Button_Volume::onPressed() {
 		{"volume",  newVolume},
 		{"mute",    false}
 	});
-	device.updateUserRelatedButtons(userIx);
+	device.updateButtons();
 }
 
 void Button_Volume::onReleased() {

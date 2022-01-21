@@ -6,7 +6,6 @@ class Button_UserRelated : public Button {
 
 public:
 	Button_UserRelated(const CtorData &d);
-	~Button_UserRelated();
 
 public:
 	inline int effectiveIx() const {

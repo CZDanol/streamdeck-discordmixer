@@ -81,4 +81,10 @@ void Plugin::subscribeVoiceEvents(const QString &channelId) {
 	discord.sendCommand("SUBSCRIBE", args, {
 		{"evt", "VOICE_STATE_DELETE"}
 	});
+	discord.sendCommand("SUBSCRIBE", args, {
+		{"evt", "SPEAKING_START"}
+	});
+	discord.sendCommand("SUBSCRIBE", args, {
+		{"evt", "SPEAKING_STOP"}
+	});
 }

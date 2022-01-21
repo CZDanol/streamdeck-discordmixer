@@ -93,7 +93,7 @@ void Device::onDiscordMessage(const QJsonObject &msg) {
 
 		else {
 			voiceStates.insert(vs.userID, vs);
-			updateAllButtons();
+			updateButtons();
 		}
 	}
 
@@ -104,14 +104,34 @@ void Device::onDiscordMessage(const QJsonObject &msg) {
 
 		else if(voiceStates.contains(vs.userID)) {
 			voiceStates.insert(vs.userID, vs);
-			updateAllButtons();
+			updateButtons();
 		}
 	}
 
 	else if(evt == "VOICE_STATE_DELETE") {
 		const auto vs = VoiceState::fromJson(msg["data"].toObject());
 		voiceStates.remove(vs.userID);
-		updateAllButtons();
+
+		if(userIxOffset >= voiceStates.size())
+			userIxOffset = 0;
+
+		updateButtons();
+	}
+
+	else if(evt == "SPEAKING_START") {
+		const QString userId = msg["data"]["user_id"].toString();
+		if(voiceStates.contains(userId)) {
+			voiceStates[userId].speaking = true;
+			updateButtons();
+		}
+	}
+
+	else if(evt == "SPEAKING_STOP") {
+		const QString userId = msg["data"]["user_id"].toString();
+		if(voiceStates.contains(userId)) {
+			voiceStates[userId].speaking = false;
+			updateButtons();
+		}
 	}
 }
 
@@ -129,21 +149,11 @@ void Device::updateData() {
 			voiceStates.insert(vs.userID, vs);
 	}
 
-	updateAllButtons();
+	updateButtons();
 }
 
-void Device::updateAllButtons() {
+void Device::updateButtons() {
 	for(Button *btn: buttons)
-		btn->update();
-}
-
-void Device::updateUserRelatedButtons(Device::UserIx userIx) {
-	for(auto it = userRelatedButtons.find(userIx), end = userRelatedButtons.end(); it != end && it.key() == userIx; it++)
-		it.value()->update();
-}
-
-void Device::updateSpecialButtons() {
-	for(Button *btn: specialButtons)
 		btn->update();
 }
 
@@ -154,5 +164,5 @@ void Device::loadSelfVoiceStateUpdate(const QJsonObject &json) {
 	if(auto v = json["voice_state"]["self_deaf"]; !v.isNull())
 		deafened = v.toBool();
 
-	updateSpecialButtons();
+	updateButtons();
 }

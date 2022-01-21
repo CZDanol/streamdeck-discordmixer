@@ -9,7 +9,7 @@ void Button_User::update() {
 	const bool is = !state.nick.isEmpty();
 
 	const QString volumeStr = state.muted ? "MUTED" : QStringLiteral("%1 %").arg(QString::number(state.volume));
-	const QString newTitle = is ? QStringLiteral("%1\n\n%2").arg(state.nick, volumeStr) : device.voiceStates.isEmpty() ? QString("NOBODY IN\nVOICE CHAT") : QString();
+	const QString newTitle = is ? QStringLiteral("%1\n%3\n%2").arg(state.nick, volumeStr, state.speaking ? "^^^^" : "") : device.voiceStates.isEmpty() ? QString("NOBODY IN\nVOICE CHAT") : QString();
 
 	if(title == newTitle)
 		return;
@@ -31,5 +31,5 @@ void Button_User::onPressed() {
 		{"user_id", state.userID},
 		{"mute",  state.muted}
 	});
-	device.updateUserRelatedButtons(userIx);
+	device.updateButtons();
 }

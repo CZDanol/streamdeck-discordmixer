@@ -11,8 +11,9 @@ public:
 public:
 	QString nick;
 	QString userID;
-	int volume;
-	bool muted;
+	int volume = 0;
+	bool muted = false;
+	bool speaking = false;
 
 };
 

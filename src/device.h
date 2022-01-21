@@ -27,9 +27,7 @@ public:
 
 public:
 	void updateData();
-	void updateAllButtons();
-	void updateUserRelatedButtons(UserIx userIx);
-	void updateSpecialButtons();
+	void updateButtons();
 
 private:
 	void loadSelfVoiceStateUpdate(const QJsonObject &json);
@@ -41,12 +39,13 @@ public:
 
 public:
 	QHash<QString, Button*> buttons;
-	QMultiHash<UserIx, Button*> userRelatedButtons;
-	QSet<Button*> specialButtons;
 	QMap<QString, VoiceState> voiceStates;
 
 	/// Used in pagination
 	int userIxOffset = 0;
+
+	int nextPageButtons = 0;
+	int prevPageButtons = 0;
 
 	bool microphoneMuted = false;
 	bool deafened = false;
