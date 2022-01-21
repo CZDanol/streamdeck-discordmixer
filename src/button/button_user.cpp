@@ -14,7 +14,7 @@ void Button_User::update() {
 	if(is)
 		newTitle = QStringLiteral("%1\n%3\n%2").arg(state.nick, volumeStr, state.speaking ? ">>SPEAKING<<" : "");
 	else if(device.voiceStates.isEmpty())
-		newTitle = QString("NOBODY IN\nVOICE CHAT");
+		newTitle = QString("NOBODY\nIN\nVOICE CHAT");
 
 	if(title == newTitle)
 		return;
