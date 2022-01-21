@@ -8,6 +8,8 @@
 #include "button/button_user.h"
 #include "button/button_volume.h"
 #include "button/button_page.h"
+#include "button/button_microphone.h"
+#include "button/button_deafen.h"
 
 Button *createButton(Device *dev, const Button::CtorData &d) {
 #define CTOR(uid, Class) {uid, [] (const Button::CtorData &d) { return new Class(d); }}
@@ -22,6 +24,9 @@ Button *createButton(Device *dev, const Button::CtorData &d) {
 		CTOR("cz.danol.discordmixer.user", Button_User),
 		CTOR("cz.danol.discordmixer.volumeup", Button_Volume),
 		CTOR("cz.danol.discordmixer.volumedown", Button_Volume),
+
+		CTOR("cz.danol.discordmixer.microphone", Button_Microphone),
+		CTOR("cz.danol.discordmixer.deafen", Button_Deafen),
 	};
 
 	auto ctor = ctors.value(d.action);
@@ -83,7 +88,10 @@ void Device::onDiscordMessage(const QJsonObject &msg) {
 
 	else if(evt == "VOICE_STATE_CREATE") {
 		const auto vs = VoiceState::fromJson(msg["data"].toObject());
-		if(vs.userID != plugin.discord.userID()) {
+		if(vs.userID == plugin.discord.userID())
+			loadSelfVoiceStateUpdate(msg["data"].toObject());
+
+		else {
 			voiceStates.insert(vs.userID, vs);
 			updateAllButtons();
 		}
@@ -91,7 +99,10 @@ void Device::onDiscordMessage(const QJsonObject &msg) {
 
 	else if(evt == "VOICE_STATE_UPDATE") {
 		const auto vs = VoiceState::fromJson(msg["data"].toObject());
-		if(voiceStates.contains(vs.userID)) {
+		if(vs.userID == plugin.discord.userID())
+			loadSelfVoiceStateUpdate(msg["data"].toObject());
+
+		else if(voiceStates.contains(vs.userID)) {
 			voiceStates.insert(vs.userID, vs);
 			updateAllButtons();
 		}
@@ -129,4 +140,19 @@ void Device::updateAllButtons() {
 void Device::updateUserRelatedButtons(Device::UserIx userIx) {
 	for(auto it = userRelatedButtons.find(userIx), end = userRelatedButtons.end(); it != end && it.key() == userIx; it++)
 		it.value()->update();
+}
+
+void Device::updateSpecialButtons() {
+	for(Button *btn: specialButtons)
+		btn->update();
+}
+
+void Device::loadSelfVoiceStateUpdate(const QJsonObject &json) {
+	if(auto v = json["voice_state"]["self_mute"]; !v.isNull())
+		microphoneMuted = v.toBool();
+
+	if(auto v = json["voice_state"]["self_deaf"]; !v.isNull())
+		deafened = v.toBool();
+
+	updateSpecialButtons();
 }

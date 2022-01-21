@@ -106,6 +106,38 @@
       "Tooltip": "Goto previous page",
       "PropertyInspectorPath": "inspector/page.html",
       "UUID": "cz.danol.discordmixer.previouspage"
+    },
+    {
+      "Icon": "icons/icons8_mute_unmute_72px",
+      "Name": "[DVM] Mute/unmute microphone",
+      "States": [
+        {
+          "Image": "icons/icons8_microphone_72px",
+          "ShowTitle": false
+        },
+        {
+          "Image": "icons/icons8_mute_unmute_72px",
+          "ShowTitle": false
+        }
+      ],
+      "Tooltip": "Mute/unmute microphone",
+      "UUID": "cz.danol.discordmixer.microphone"
+    },
+    {
+      "Icon": "icons/icons8_no_audio_72px",
+      "Name": "[DVM] Mute/unmute audio (deafen)",
+      "States": [
+        {
+          "Image": "icons/icons8_audio_72px",
+          "ShowTitle": false
+        },
+        {
+          "Image": "icons/icons8_no_audio_72px",
+          "ShowTitle": false
+        }
+      ],
+      "Tooltip": "Mute/unmute audio (deafen)",
+      "UUID": "cz.danol.discordmixer.deafen"
     }
   ],
   "SDKVersion": 2,
