@@ -11,11 +11,11 @@ void Button_User::update() {
 	const VoiceState vs = device.voiceStates.value(device.voiceStates.keys().value(effectiveIx()));
 	const bool is = !vs.nick.isEmpty();
 
-	const QString volumeStr = vs.muted ? "MUTED" : QStringLiteral("%1 %").arg(QString::number(vs.volume));
+	const QString volumeStr = vs.muted ? "####MUTED####" : QStringLiteral("%1 %").arg(QString::number(vs.volume));
 
 	QString newTitle;
 	if(is)
-		newTitle = QStringLiteral("%1\n%3\n%2").arg(vs.nick, volumeStr, vs.speaking ? ">>SPEAKING<<" : "");
+		newTitle = QStringLiteral("%1\n%3\n%2").arg(vs.nick, volumeStr, vs.speaking ? ">>SPEAKING<<" : vs.muted ? "##" : "");
 	else if(device.voiceStates.isEmpty())
 		newTitle = QString("NOBODY\nIN\nVOICE CHAT");
 
@@ -64,13 +64,18 @@ void Button_User::onPressed() {
 	if(id.isEmpty())
 		return;
 
-	VoiceState &state = device.voiceStates[id];
+	VoiceState &vs = device.voiceStates[id];
 
-	state.muted = !state.muted;
+	vs.muted = !vs.muted;
 
 	device.plugin.discord.sendCommand("SET_USER_VOICE_SETTINGS", {
-		{"user_id", state.userID},
-		{"mute",    state.muted}
+		{"user_id", vs.userID},
+		{"mute",    vs.muted}
 	});
+	device.plugin.deck.setState(state, context);
 	device.updateButtons();
+}
+
+void Button_User::onReleased() {
+	device.plugin.deck.setState(state, context);
 }

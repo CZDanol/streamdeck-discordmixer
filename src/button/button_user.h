@@ -9,6 +9,7 @@ public:
 
 public:
 	virtual void onPressed() override;
+	virtual void onReleased() override;
 
 public:
 	virtual void update() override;

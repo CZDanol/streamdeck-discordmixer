@@ -149,6 +149,9 @@ void Device::updateData() {
 			voiceStates.insert(vs.userID, vs);
 	}
 
+	if(userIxOffset >= voiceStates.size())
+		userIxOffset = 0;
+
 	updateButtons();
 }
 
