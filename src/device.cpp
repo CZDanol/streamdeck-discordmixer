@@ -41,7 +41,7 @@ Button *createButton(Device *dev, const Button::CtorData &d) {
 }
 
 Device::Device(Plugin &plugin, const QString &deviceID, const QJsonObject &deviceInfo) : plugin(plugin), deviceID(deviceID), deviceInfo(deviceInfo) {
-
+	connect(&plugin.discord, &QDiscord::avatarReady, this, &Device::updateButtons);
 }
 
 Device::~Device() {

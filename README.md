@@ -42,4 +42,7 @@ This is a plugin for Stream Deck for managing Discord Voice chats:
 * Big cudos to [Krabs](https://github.com/krabs-github) for helping me out with profiles for the XL version and testing.
 
 ## TODO
+* Do not require the DVM button to be pressed for the stuff to start working -> discord stuff to the global settings
+* Volume increase step also in the global settings
 * Maybe support discord user icons?
+* Button to quick join/select voice and text channels

@@ -15,6 +15,9 @@ public:
 
 public:
 	QString title;
+	QString userId;
+	int state = 0;
+	bool hasAvatar = false;
 
 };
 

@@ -3,6 +3,7 @@
 #include <QString>
 #include <QScopedPointer>
 #include <QSharedPointer>
+#include <QCache>
 
 #include <qtstreamdeck/qstreamdeckplugin.h>
 #include <qtdiscordipc/qdiscord.h>
@@ -24,6 +25,7 @@ public:
 
 public:
 	void subscribeVoiceEvents(const QString &channelId);
+
 
 public:
 	QStreamDeckPlugin deck;

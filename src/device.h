@@ -10,7 +10,8 @@
 class Plugin;
 class Button;
 
-class Device {
+class Device : public QObject {
+	Q_OBJECT
 
 public:
 	using UserIx = int;
@@ -27,7 +28,7 @@ public:
 
 public:
 	void updateData();
-	void updateButtons();
+	Q_SLOT void updateButtons();
 
 private:
 	void loadSelfVoiceStateUpdate(const QJsonObject &json);

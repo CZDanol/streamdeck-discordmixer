@@ -83,3 +83,4 @@ void Plugin::subscribeVoiceEvents(const QString &channelId) {
 	if(!curentDiscordChannelID.isNull())
 		f("SUBSCRIBE");
 }
+

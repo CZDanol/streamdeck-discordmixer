@@ -4,7 +4,7 @@ static constexpr int minVolume = 0;
 static constexpr int maxVolume = 200;
 
 Button_Volume::Button_Volume(const Button::CtorData &d) : Button_UserRelated(d) {
-	step = (d.action == "cz.danol.discordmixer.volumeup" ? 1 : -1) * 10;
+	step = (d.action == "cz.danol.discordmixer.volumeup" ? 1 : -1) * 5;
 
 	repeatTimer.setInterval(100);
 	repeatTimer.callOnTimeout([this] {
