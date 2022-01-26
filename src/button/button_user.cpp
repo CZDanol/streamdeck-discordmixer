@@ -9,13 +9,14 @@ Button_User::Button_User(const Button::CtorData &d) : Button_UserRelated(d) {
 
 void Button_User::update() {
 	const VoiceState vs = device.voiceStates.value(device.voiceStates.keys().value(effectiveIx()));
+	const bool isSpeaking = device.speakingUsers.contains(vs.userID);
 	const bool is = !vs.nick.isEmpty();
 
 	const QString volumeStr = vs.muted ? "MUTED" : QStringLiteral("%1 %").arg(QString::number(vs.volume));
 
 	QString newTitle;
 	if(is)
-		newTitle = QStringLiteral("%1\n%3\n%2").arg(vs.nick, volumeStr, vs.speaking ? ">>SPEAKING<<" : vs.muted ? "##" : "");
+		newTitle = QStringLiteral("%1\n%3\n%2").arg(vs.nick, volumeStr, isSpeaking ? ">>SPEAKING<<" : vs.muted ? "##" : "");
 	else if(device.voiceStates.isEmpty())
 		newTitle = QString("NOBODY\nIN\nVOICE CHAT");
 
@@ -32,7 +33,7 @@ void Button_User::update() {
 		hasAvatar = !avatar.isNull();
 
 		QImage img(72, 72, QImage::Format_ARGB32);
-		const auto setImage = [&] (int state) {
+		const auto setImage = [&](int state) {
 			QByteArray ba;
 			QBuffer buf(&ba);
 			buf.open(QIODevice::WriteOnly);
@@ -52,7 +53,7 @@ void Button_User::update() {
 		setImage(1);
 	}
 
-	const int newState = vs.speaking ? 1 : 0;
+	const int newState = isSpeaking ? 1 : 0;
 	if(state != newState) {
 		state = newState;
 		device.plugin.deck.setState(state, context);

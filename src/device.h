@@ -41,6 +41,7 @@ public:
 public:
 	QHash<QString, Button*> buttons;
 	QMap<QString, VoiceState> voiceStates;
+	QSet<QString> speakingUsers;
 
 	/// Used in pagination
 	int userIxOffset = 0;

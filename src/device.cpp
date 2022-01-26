@@ -120,16 +120,16 @@ void Device::onDiscordMessage(const QJsonObject &msg) {
 
 	else if(evt == "SPEAKING_START") {
 		const QString userId = msg["data"]["user_id"].toString();
-		if(voiceStates.contains(userId)) {
-			voiceStates[userId].speaking = true;
+		if(!speakingUsers.contains(userId)) {
+			speakingUsers.insert(userId);
 			updateButtons();
 		}
 	}
 
 	else if(evt == "SPEAKING_STOP") {
 		const QString userId = msg["data"]["user_id"].toString();
-		if(voiceStates.contains(userId)) {
-			voiceStates[userId].speaking = false;
+		if(speakingUsers.contains(userId)) {
+			speakingUsers.remove(userId);
 			updateButtons();
 		}
 	}

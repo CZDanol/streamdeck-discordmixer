@@ -13,7 +13,6 @@ public:
 	QString userID, avatarID;
 	int volume = 0;
 	bool muted = false;
-	bool speaking = false;
 
 };
 
