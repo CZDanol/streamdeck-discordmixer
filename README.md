@@ -28,9 +28,9 @@ This is a plugin for Stream Deck for managing Discord Voice chats:
 7. Click on the deck button. Discord will ask you for some permissions & firewall and stuff.
 8. Done.
 
-![](etc/oauth.png)
-
 **Don't play with the configuration of the buttons in the Volume Mixer profile unless you know what you're doing.**
+
+![](etc/oauth.png)
 
 ## Third-party libraries, credits
 * Qt 6 (tested on Qt 6.2.1 MSVC 2019 Win x64)
