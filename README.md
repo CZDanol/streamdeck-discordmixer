@@ -48,4 +48,4 @@ This is a plugin for Stream Deck for managing Discord Voice chats:
 * Fix crash when changing step on page next button
 * Do not require the DVM button to be pressed for the stuff to start working -> discord stuff to the global settings
 * Volume increase step also in the global settings
-* Button to quick join/select voice and text channels
+* Button to quick join/select voice and text channels (now implemented in the official Discord plugin)
