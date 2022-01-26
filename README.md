@@ -28,6 +28,7 @@ This is a plugin for Stream Deck for managing Discord Voice chats:
 7. Click on the deck button. Discord will ask you for some permissions & firewall and stuff.
 8. Done.
 
+![](etc/oauth.png)
 
 **Don't play with the configuration of the buttons in the Volume Mixer profile unless you know what you're doing.**
 
@@ -42,6 +43,8 @@ This is a plugin for Stream Deck for managing Discord Voice chats:
 * Big cudos to [Krabs](https://github.com/krabs-github) for helping me out with profiles for the XL version and testing.
 
 ## TODO
+* Move UI<>IPC volume mapping code to QtDiscordIPC
+* QtStreamDeck create subfolder (for easier including)
 * Fix crash when changing step on page next button
 * Do not require the DVM button to be pressed for the stuff to start working -> discord stuff to the global settings
 * Volume increase step also in the global settings
