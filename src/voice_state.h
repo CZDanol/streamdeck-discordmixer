@@ -6,10 +6,6 @@
 struct VoiceState {
 
 public:
-	static double ipcToUIVolume(double v);
-	static double uiToIPCVolume(double v);
-
-public:
 	static VoiceState fromJson(const QJsonObject &json);
 
 public:

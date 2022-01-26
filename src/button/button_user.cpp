@@ -11,7 +11,7 @@ void Button_User::update() {
 	const VoiceState vs = device.voiceStates.value(device.voiceStates.keys().value(effectiveIx()));
 	const bool is = !vs.nick.isEmpty();
 
-	const QString volumeStr = vs.muted ? "####MUTED####" : QStringLiteral("%1 %").arg(QString::number(vs.volume));
+	const QString volumeStr = vs.muted ? "MUTED" : QStringLiteral("%1 %").arg(QString::number(vs.volume));
 
 	QString newTitle;
 	if(is)

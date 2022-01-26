@@ -60,7 +60,7 @@ void Button_Volume::trigger() {
 
 	device.plugin.discord.sendCommand("SET_USER_VOICE_SETTINGS", {
 		{"user_id", s->userID},
-		{"volume",  qRound(VoiceState::uiToIPCVolume(newVolume))},
+		{"volume",  QDiscord::uiToIPCVolume(newVolume)},
 		{"mute",    false}
 	});
 	device.updateButtons();
