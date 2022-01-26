@@ -5,19 +5,30 @@
 #include "plugin.h"
 
 void messageLogger(QtMsgType t, const QMessageLogContext &, const QString &msg) {
-	static QFile f("log.txt");
-	if(!f.isOpen())
-		f.open(QIODevice::WriteOnly);
+	static QFile lf("log.txt"), clf("clog.txt");
+	if(!lf.isOpen())
+		lf.open(QIODevice::WriteOnly);
 
-	f.write(msg.toUtf8());
-	f.write("\n");
-	f.flush();
+	if(!clf.isOpen() && clf.exists())
+		clf.open(QIODevice::Append);
+
+	if(lf.isOpen()) {
+		lf.write(msg.toUtf8());
+		lf.write("\n");
+		lf.flush();
+	}
+
+	if(clf.isOpen()) {
+		clf.write(msg.toUtf8());
+		clf.write("\n");
+		clf.flush();
+	}
 }
 
 int main(int argc, char *argv[]) {
 	QGuiApplication app(argc, argv);
 	qInstallMessageHandler(&messageLogger);
-	qDebug() << "App start";
+	qDebug() << QDateTime::currentDateTime().toString() << "App start";
 
 	ESDConfig esdConfig;
 	{
