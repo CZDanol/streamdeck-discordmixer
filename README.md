@@ -9,12 +9,12 @@ This is a plugin for Stream Deck for managing Discord Voice chats:
 * You can adjust the audio mixer panel to your needs, it's quite modular - you can move buttons around etc.
 * Tested on W10x64.
 
+![](etc/sshot.png)
+
 ### Support
 * **!!! First read Configuration below !!!**
 * If you have some feedback, ask around on [Stream Deck Labs Discord server](https://discord.com/invite/294BQE6Xdp) on the `#danols-plugin-support` channel.
 * If you really feel like giving me some money, you can use [PayPal](https://www.paypal.com/donate/?hosted_button_id=QZC5P67TBTRX6).
-
-![](etc/sshot.png)
 
 ## Configuration
 1. Download and install the plugin.
