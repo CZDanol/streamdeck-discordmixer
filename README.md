@@ -1,11 +1,11 @@
 # Stream Deck Discord Volume Mixer
 This is a plugin for Stream Deck for managing Discord Voice chats:
 * Shows list of people in your voice chat.
-* You can adjust volume for each user.
-* You can mute each user by clicking on his name button.
-* Indication when a user is speaking.
-* Self mute and deafen buttons (deafen only on XL, mute on XL and STD)
-* Supports Standard, Mini and XL Decks.
+* You can **adjust volume** for each user.
+* You can **mute** each user by clicking on his name button.
+* **Indication** when a user is **speaking**.
+* **Self mute and deafen** buttons (deafen only on XL, mute on XL and STD)
+* Supports **Standard, Mini and XL Decks**.
 * You can adjust the audio mixer panel to your needs, it's quite modular - you can move buttons around etc.
 * Tested on W10x64.
 
