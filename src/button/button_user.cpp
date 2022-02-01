@@ -15,7 +15,9 @@ void Button_User::update() {
 	const QString volumeStr = vs.muted ? "MUTED" : QStringLiteral("%1 %").arg(QString::number(vs.volume));
 
 	QString newTitle;
-	if(is)
+	if(!device.plugin.discord.isConnected())
+		newTitle = QStringLiteral("NOT CONNECTED");
+	else if(is)
 		newTitle = QStringLiteral("%1\n%3\n%2").arg(vs.nick, volumeStr, isSpeaking ? ">>SPEAKING<<" : vs.muted ? "##" : "");
 	else if(device.voiceStates.isEmpty())
 		newTitle = QString("NOBODY\nIN\nVOICE CHAT");
