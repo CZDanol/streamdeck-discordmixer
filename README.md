@@ -22,10 +22,10 @@ This is a plugin for Stream Deck for managing Discord Voice chats:
 2. Add the "Discord Volume Mixer" button on your deck.
 3. Go to the [Discord developer portal](https://discordapp.com/developers) and create an application.
    * **You must use the same account in to the Developer portal as in your Discord application, otherwise it won't work.** (You can add the other account as app tester though.)
-   * You're setting this stuff up for your own account, not for any bot or anythin else.
+   * You're setting this stuff up for your own account, not for any bot or anything else.
 4. In the Oauth2 settings, set the redirect URI to `http://localhost:1337/callback`
 5. Hit "Save changes".
-6. From the OAuth2 tab, copy `Client ID` and `Client secret` and paste it in the deck button details.
+6. From the OAuth2 tab, copy `Client ID` and `Client secret` and paste it in your Discord Volume Mixer button settings (the button used to access the volume mixer).
 7. Click on the deck button. Discord will ask you for some permissions & firewall and stuff.
 8. Done.
 
@@ -44,7 +44,8 @@ This is a plugin for Stream Deck for managing Discord Voice chats:
 
 ## TODO
 * QtStreamDeck create subfolder (for easier including)
+* Add mobile support
+* Crash when page button offset = 0
 * Fix crash when changing step on page next button
 * Do not require the DVM button to be pressed for the stuff to start working -> discord stuff to the global settings
 * Volume increase step also in the global settings
-* Button to quick join/select voice and text channels (now implemented in the official Discord plugin)
