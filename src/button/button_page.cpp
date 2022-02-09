@@ -16,7 +16,7 @@ auto computeParams(Button_Page &b) {
 		int maxOffset;
 	};
 
-	const int stepAbs = qAbs(b.step);
+	const int stepAbs = qMax(1, qAbs(b.step));
 
 	R r;
 	r.pageCount = static_cast<int>(b.device.voiceStates.size() + stepAbs - 1) / stepAbs;
