@@ -45,7 +45,4 @@ This is a plugin for Stream Deck for managing Discord Voice chats:
 ## TODO
 * QtStreamDeck create subfolder (for easier including)
 * Add mobile support
-* Crash when page button offset = 0
-* Fix crash when changing step on page next button
-* Do not require the DVM button to be pressed for the stuff to start working -> discord stuff to the global settings
 * Volume increase step also in the global settings

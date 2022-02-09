@@ -11,7 +11,7 @@
       ],
       "SupportedInMultiActions": false,
       "Tooltip": "Opens a mixer for Discord voice chat",
-      "PropertyInspectorPath": "inspector/mixer.html",
+      "PropertyInspectorPath": "inspector/default.html",
       "UUID": "cz.danol.discordmixer.openmixer"
     },
     {
@@ -143,6 +143,7 @@
         }
       ],
       "Tooltip": "Mute/unmute microphone",
+      "PropertyInspectorPath": "inspector/default.html",
       "UUID": "cz.danol.discordmixer.microphone"
     },
     {
@@ -159,6 +160,7 @@
         }
       ],
       "Tooltip": "Mute/unmute audio (deafen)",
+      "PropertyInspectorPath": "inspector/default.html",
       "UUID": "cz.danol.discordmixer.deafen"
     }
   ],

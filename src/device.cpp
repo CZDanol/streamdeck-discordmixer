@@ -62,15 +62,8 @@ void Device::onSettingsReceived(const QStreamDeckAction &action) {
 	if(!btn)
 		return;
 
-	Button::CtorData d{this, action.action, action.context, btn->payload};
-	QJsonObject s = d.payload["settings"].toObject();
-
-	for(auto it = action.payload.begin(), end = action.payload.end(); it != end; it++) {
-		s[it.key()] = it.value();
-	}
-
-	d.payload["settings"] = s;
-	createButton(this, d);
+	qDebug() << "Settings received" << action.payload;
+	createButton(this, Button::CtorData{this, action.action, action.context, action.payload});
 
 	delete btn;
 }
