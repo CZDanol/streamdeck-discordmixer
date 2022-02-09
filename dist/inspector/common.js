@@ -42,16 +42,4 @@ function updateSettings(key, value) {
         };
         websocket.send(JSON.stringify(json));
     }
-
-    {
-        const json = {
-            "action": actionInfo['action'],
-            "event": "sendToPlugin",
-            "context": uuid,
-            "payload": {
-                [key]: value
-            }
-        };
-        websocket.send(JSON.stringify(json));
-    }
 }

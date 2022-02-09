@@ -23,7 +23,7 @@ public:
 public:
 	void onAppear(const QStreamDeckAction &action);
 	void onDisappear(const QStreamDeckAction &action);
-	void onSendToPlugin(const QStreamDeckAction &action);
+	void onSettingsReceived(const QStreamDeckAction &action);
 	void onDiscordMessage(const QJsonObject &msg);
 
 public:

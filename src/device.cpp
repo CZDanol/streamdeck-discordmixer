@@ -56,7 +56,7 @@ void Device::onDisappear(const QStreamDeckAction &action) {
 	delete buttons.take(action.context);
 }
 
-void Device::onSendToPlugin(const QStreamDeckAction &action) {
+void Device::onSettingsReceived(const QStreamDeckAction &action) {
 	// Basically recreate the button
 	Button *btn = buttons.take(action.context);
 	if(!btn)
