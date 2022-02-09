@@ -15,7 +15,7 @@ Button_Volume::Button_Volume(const Button::CtorData &d) : Button_UserRelated(d) 
 
 VoiceState *Button_Volume::voiceState() {
 	const int ix = effectiveIx();
-	if(ix >= device.voiceStates.size())
+	if(ix < 0 || ix >= device.voiceStates.size())
 		return nullptr;
 
 	return &device.voiceStates[device.voiceStates.keys()[ix]];
