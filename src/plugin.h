@@ -22,15 +22,16 @@ class Plugin : public QObject {
 
 public:
 	bool init(const ESDConfig &esdConfig);
+	bool connectToDiscord();
 
 public:
 	void subscribeVoiceEvents(const QString &channelId);
-
 
 public:
 	QStreamDeckPlugin deck;
 	QDiscord discord;
 	QString curentDiscordChannelID;
+	QJsonObject globalSettings;
 
 private:
 	QHash<QString, QSharedPointer<Device>> devices_;

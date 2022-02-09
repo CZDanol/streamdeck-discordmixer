@@ -9,13 +9,14 @@
 </head>
 <body>
 <div class="sdpi-wrapper">
+    <div class="sdpi-heading">Global settings</div>
     <div class="sdpi-item">
         <div class="sdpi-item-label">Client ID</div>
-        <input class="sdpi-item-value" id="client_id" oninput="updateSettings('client_id', event.target.value)" required>
+        <input class="sdpi-item-value" id="client_id" oninput="updateGlobalSettings('client_id', event.target.value)" required>
     </div>
     <div class="sdpi-item">
         <div class="sdpi-item-label">Client secret</div>
-        <input class="sdpi-item-value" id="client_secret" oninput="updateSettings('client_secret', event.target.value)" required>
+        <input class="sdpi-item-value" id="client_secret" oninput="updateGlobalSettings('client_secret', event.target.value)" required>
     </div>
     <details class="message">
         <summary>For configuration inscrutions, see the <a href="https://github.com/CZDanol/streamdeck-discordmixer" target="_blank">GitHub page</a>.</summary>
@@ -23,8 +24,7 @@
 </div>
 <script>
     function fillData(settings) {
-        document.getElementById("client_secret").value = settings.client_secret ?? null;
-        document.getElementById("client_id").value = settings.client_id ?? null;
+
     }
 </script>
 <script src="common.js"></script>

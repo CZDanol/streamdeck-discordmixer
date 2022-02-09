@@ -3,7 +3,8 @@
 var websocket = null,
     uuid = null,
     actionInfo = {},
-    settings = {};
+    settings = {},
+    globalSettings = {};
 
 function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, inActionInfo) {
     uuid = inUUID;
@@ -15,12 +16,27 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, 
     // if connection was established, the websocket sends
     // an 'onopen' event, where we need to register our PI
     websocket.onopen = function () {
-        var json = {
+        // register property inspector to Stream Deck
+        websocket.send(JSON.stringify({
             event: inRegisterEvent,
             uuid: inUUID
-        };
-        // register property inspector to Stream Deck
-        websocket.send(JSON.stringify(json));
+        }));
+
+        // Ask for global settings
+        websocket.send(JSON.stringify(son = {
+            event: "getGlobalSettings",
+            context: uuid
+        }));
+    }
+
+    websocket.onmessage = function (ev) {
+        let evd = JSON.parse(ev.data);
+        if (evd.event == "didReceiveGlobalSettings") {
+            let s = evd.payload.settings;
+            globalSettings = s;
+            document.getElementById("client_secret").value = s.client_secret ?? null;
+            document.getElementById("client_id").value = s.client_id ?? null;
+        }
     }
 
     settings = actionInfo.payload.settings;
@@ -39,6 +55,22 @@ function updateSettings(key, value) {
             "event": "setSettings",
             "context": uuid,
             "payload": settings
+        };
+        websocket.send(JSON.stringify(json));
+    }
+}
+
+function updateGlobalSettings(key, value) {
+    globalSettings[key] = value;
+
+    if (!websocket)
+        return;
+
+    {
+        const json = {
+            "event": "setGlobalSettings",
+            "context": uuid,
+            "payload": globalSettings
         };
         websocket.send(JSON.stringify(json));
     }

@@ -6,7 +6,9 @@
 
 void messageLogger(QtMsgType t, const QMessageLogContext &, const QString &msg) {
 	static QFile lf("log.txt"), clf("clog.txt");
-	if(!lf.isOpen())
+
+	// Only create log files if they already exist
+	if(!lf.isOpen() && lf.exists())
 		lf.open(QIODevice::WriteOnly);
 
 	if(!clf.isOpen() && clf.exists())

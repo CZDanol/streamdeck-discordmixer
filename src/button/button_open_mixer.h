@@ -17,8 +17,5 @@ public:
 public:
 	virtual void onPressed() override;
 
-public:
-	QString clientID, clientSecret;
-
 };
 

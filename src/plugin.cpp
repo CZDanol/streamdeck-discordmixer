@@ -9,6 +9,11 @@ bool Plugin::init(const ESDConfig &esdConfig) {
 		if(!deck.connect())
 			return false;
 
+		connect(&deck, &QStreamDeckPlugin::pluginConnected, this, [this] {
+			// Ask for global settings
+			deck.getGlobalSettings(deck.pluginUUID());
+		});
+
 		connect(&deck, &QStreamDeckPlugin::deviceDidConnect, this, [this](const QString &deviceID, const QJsonObject &deviceInfo) {
 			devices_[deviceID].reset(new Device(*this, deviceID, deviceInfo));
 		});
@@ -17,6 +22,14 @@ bool Plugin::init(const ESDConfig &esdConfig) {
 		});
 
 		connect(&deck, &QStreamDeckPlugin::willAppear, this, [this](const QStreamDeckAction &action) {
+			// For compability with previous discord mixer versions - client secret and id were stored in the mixer plugin button
+			if(action.action == "cz.danol.discordmixer.openmixer" && globalSettings.isEmpty() && !action.payload["settings"].toObject().isEmpty()) {
+				qDebug() << "Transferering settings from the openmixer button" << action.payload["settings"];
+				globalSettings = action.payload["settings"].toObject();
+				deck.setGlobalSettings(globalSettings, deck.pluginUUID());
+				deck.setSettings({}, action.context);
+			}
+
 			contextDevices_[action.context] = action.deviceId;
 			devices_[action.deviceId]->onAppear(action);
 		});
@@ -32,8 +45,23 @@ bool Plugin::init(const ESDConfig &esdConfig) {
 
 			devices_[a.deviceId]->onSettingsReceived(a);
 		});
+		connect(&deck, &QStreamDeckPlugin::didReceiveGlobalSettings, this, [this](const QJsonObject &settings) {
+			qDebug() << "Received global settings" << settings;
+			globalSettings = settings;
+
+			if(!discord.isConnected()) {
+				const bool r = connectToDiscord();
+				qDebug() << "Attempting Discord autoconnect connect" << r;
+			}
+		});
 
 		connect(&deck, &QStreamDeckPlugin::keyDown, this, [this](const QStreamDeckAction &action) {
+			if(!discord.isConnected() && !connectToDiscord()) {
+				qDebug() << "Keydown connect failed";
+				deck.showAlert(action.context);
+				return;
+			}
+
 			if(auto btn = devices_[action.deviceId]->buttons.value(action.context))
 				btn->onPressed();
 		});
@@ -61,6 +89,10 @@ bool Plugin::init(const ESDConfig &esdConfig) {
 	}
 
 	return true;
+}
+
+bool Plugin::connectToDiscord() {
+	return discord.connect(globalSettings["client_id"].toString(), globalSettings["client_secret"].toString());
 }
 
 void Plugin::subscribeVoiceEvents(const QString &channelId) {

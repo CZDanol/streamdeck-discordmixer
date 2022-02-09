@@ -16,6 +16,19 @@
     <details class="message">
         <summary>With each button press, the offset of User Index of the volume & user buttons is increased/decreased by step.</summary>
     </details>
+
+    <div class="sdpi-heading">Global settings</div>
+    <div class="sdpi-item">
+        <div class="sdpi-item-label">Client ID</div>
+        <input class="sdpi-item-value" id="client_id" oninput="updateGlobalSettings('client_id', event.target.value)" required>
+    </div>
+    <div class="sdpi-item">
+        <div class="sdpi-item-label">Client secret</div>
+        <input class="sdpi-item-value" id="client_secret" oninput="updateGlobalSettings('client_secret', event.target.value)" required>
+    </div>
+    <details class="message">
+        <summary>For configuration inscrutions, see the <a href="https://github.com/CZDanol/streamdeck-discordmixer" target="_blank">GitHub page</a>.</summary>
+    </details>
 </div>
 <script>
     function fillData(settings) {
