@@ -3,7 +3,7 @@
 void Button_Microphone::onReleased() {
 	device.microphoneMuted ^= 1;
 	device.plugin.discord.sendCommand("SET_VOICE_SETTINGS", {{"mute", device.microphoneMuted}});
-	device.updateButtons();
+	device.plugin.updateButtons();
 }
 
 void Button_Microphone::update() {

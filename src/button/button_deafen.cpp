@@ -4,7 +4,7 @@ void Button_Deafen::onReleased() {
 	device.deafened ^= 1;
 	device.microphoneMuted |= device.deafened;
 	device.plugin.discord.sendCommand("SET_VOICE_SETTINGS", {{"deaf", device.deafened}});
-	device.updateButtons();
+	device.plugin.updateButtons();
 }
 
 void Button_Deafen::update() {

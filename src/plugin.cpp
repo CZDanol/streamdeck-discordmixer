@@ -31,19 +31,26 @@ bool Plugin::init(const ESDConfig &esdConfig) {
 			}
 
 			contextDevices_[action.context] = action.deviceId;
-			devices_[action.deviceId]->onAppear(action);
+			obtainDevice(action.deviceId)->onAppear(action);
 		});
 		connect(&deck, &QStreamDeckPlugin::willDisappear, this, [this](const QStreamDeckAction &action) {
-			devices_[action.deviceId]->onDisappear(action);
 			contextDevices_.remove(action.context);
+
+			auto d = devices_.value(action.deviceId);
+			if(!d)
+				return;
+
+			d->onDisappear(action);
 		});
 		connect(&deck, &QStreamDeckPlugin::didReceiveSettings, this, [this](const QStreamDeckAction &action) {
 			QStreamDeckAction a = action;
 			a.deviceId = contextDevices_.value(action.context);
-			if(a.deviceId.isEmpty())
+
+			auto d = devices_.value(a.deviceId);
+			if(!d)
 				return;
 
-			devices_[a.deviceId]->onSettingsReceived(a);
+			d->onSettingsReceived(a);
 		});
 		connect(&deck, &QStreamDeckPlugin::didReceiveGlobalSettings, this, [this](const QJsonObject &settings) {
 			qDebug() << "Received global settings" << settings;
@@ -62,12 +69,26 @@ bool Plugin::init(const ESDConfig &esdConfig) {
 				return;
 			}
 
-			if(auto btn = devices_[action.deviceId]->buttons.value(action.context))
-				btn->onPressed();
+			auto d = devices_.value(contextDevices_.value(action.context));
+			if(!d)
+				return;
+
+			auto btn = d->buttons.value(action.context);
+			if(!btn)
+				return;
+
+			btn->onPressed();
 		});
 		connect(&deck, &QStreamDeckPlugin::keyUp, this, [this](const QStreamDeckAction &action) {
-			if(auto btn = devices_[action.deviceId]->buttons.value(action.context))
-				btn->onReleased();
+			auto d = devices_.value(contextDevices_.value(action.context));
+			if(!d)
+				return;
+
+			auto btn = d->buttons.value(action.context);
+			if(!btn)
+				return;
+
+			btn->onReleased();
 		});
 	}
 
@@ -115,3 +136,17 @@ void Plugin::subscribeVoiceEvents(const QString &channelId) {
 		f("SUBSCRIBE");
 }
 
+Device *Plugin::obtainDevice(const QString &id) {
+	auto &d = devices_[id];
+
+	// Workaround for stupid elgato api sometimes not sending deviceDidConnect
+	if(!d)
+		d.reset(new Device(*this, id, {}));
+
+	return d.get();
+}
+
+void Plugin::updateButtons() {
+	for(const auto &d: devices_)
+		d->updateButtons();
+}

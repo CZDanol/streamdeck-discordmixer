@@ -27,6 +27,11 @@ public:
 public:
 	void subscribeVoiceEvents(const QString &channelId);
 
+	/// Safely obtains device, creates it when it doesn't exist (even though it should, but
+	Device *obtainDevice(const QString &id);
+
+	void updateButtons();
+
 public:
 	QStreamDeckPlugin deck;
 	QDiscord discord;

@@ -76,7 +76,7 @@ void Button_User::onPressed() {
 		{"mute",    vs.muted}
 	});
 	device.plugin.deck.setState(state, context);
-	device.updateButtons();
+	device.plugin.updateButtons();
 }
 
 void Button_User::onReleased() {

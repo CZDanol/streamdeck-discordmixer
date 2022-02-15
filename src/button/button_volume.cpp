@@ -63,5 +63,5 @@ void Button_Volume::trigger() {
 		{"volume",  QDiscord::uiToIPCVolume(newVolume)},
 		{"mute",    false}
 	});
-	device.updateButtons();
+	device.plugin.updateButtons();
 }
