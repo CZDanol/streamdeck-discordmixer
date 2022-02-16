@@ -12,6 +12,6 @@ void Button_OpenMixer::onPressed() {
 		{3, "Discord Volume Mixer"}, // Mobile
 	};
 
-	device.plugin.deck.switchProfile(device.deviceID, profileNameByDeviceType.value(device.deviceInfo["type"].toInt()));
+	device.plugin.deck.switchProfile(device.deviceID, profileNameByDeviceType.value(device.deviceInfo["type"].toInt(), "Discord Volume Mixer"));
 	device.updateData();
 }
