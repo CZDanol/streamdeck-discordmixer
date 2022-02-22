@@ -17,6 +17,14 @@
         <summary>Index in the channel users list, indexed from 0.</summary>
     </details>
 
+    <div class="sdpi-item" type="checkbox">
+        <div class="sdpi-item-label">Hide "Nobody in voice chat" text</div>
+        <div class="spdi-item-value">
+            <input id="hide_nivc" type="checkbox" oninput="updateSettings('hide_nivc', event.target.checked)">
+            <label for="hide_nivc"><span></span>Hide</label>
+        </div>
+    </div>
+
     <div class="sdpi-heading">Global settings</div>
     <div class="sdpi-item">
         <div class="sdpi-item-label">Client ID</div>
@@ -33,6 +41,7 @@
 <script>
     function fillData(settings) {
         document.getElementById("user_ix").value = settings.user_ix ?? 0;
+        document.getElementById("hide_nivc").checked = settings.hide_nivc ?? false;
     }
 </script>
 <script src="common.js"></script>

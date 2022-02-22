@@ -4,7 +4,7 @@
 #include <QPainter>
 
 Button_User::Button_User(const Button::CtorData &d) : Button_UserRelated(d) {
-
+	hideNotbodyInVoiceChatText = d.payload["settings"]["hide_nivc"].toBool();
 }
 
 void Button_User::update() {
@@ -19,7 +19,7 @@ void Button_User::update() {
 		newTitle = QStringLiteral("DISCORD\nNOT\nCONNECTED");
 	else if(is)
 		newTitle = QStringLiteral("%1\n%3\n%2").arg(vs.nick, volumeStr, isSpeaking ? ">>SPEAKING<<" : vs.muted ? "##" : "");
-	else if(device.voiceStates.isEmpty())
+	else if(device.voiceStates.isEmpty() && !hideNotbodyInVoiceChatText)
 		newTitle = QString("NOBODY\nIN\nVOICE CHAT");
 
 	if(title != newTitle) {

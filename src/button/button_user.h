@@ -19,6 +19,7 @@ public:
 	QString userId;
 	int state = 0;
 	bool hasAvatar = false;
+	bool hideNotbodyInVoiceChatText = false;
 
 };
 
