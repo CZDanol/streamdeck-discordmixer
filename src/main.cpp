@@ -28,6 +28,8 @@ void messageLogger(QtMsgType t, const QMessageLogContext &, const QString &msg) 
 }
 
 int main(int argc, char *argv[]) {
+	QCoreApplication::setAttribute(Qt::AA_PluginApplication);
+	
 	QGuiApplication app(argc, argv);
 	qInstallMessageHandler(&messageLogger);
 	qDebug() << QDateTime::currentDateTime().toString() << "App start";
