@@ -44,9 +44,8 @@ This is a plugin for Stream Deck for managing Discord Voice chats:
 * [Icons8 icons](https://icons8.com/)
 
 ### Credits
-* Big cudos to [Krabs](https://github.com/krabs-github) for helping me out with profiles for the XL version and testing.
+* Big cudos to [Krabs](https://github.com/krabs-github) for helping me out with profiles for the XL version and testing and overall being awesome.
 
 ## TODO
 * QtStreamDeck create subfolder (for easier including)
-* Add mobile support
 * Volume increase step also in the global settings
