@@ -19,7 +19,7 @@ This is a plugin for Stream Deck for managing Discord Voice chats:
 ## Configuration
 1. Download and install the plugin.
 2. Add the "Discord Volume Mixer" button on your deck.
-3. Go to the [Discord developer portal](https://discordapp.com/developers) (if the link asks you for login and then opens a standard discord app, close the window and click the link again) and create an application.
+3. Go to the [Discord developer portal](https://discordapp.com/developers) (if the link asks you for login and then shows the Discord app, close the window and click this link again) and create an application.
    * **You must use the same account in to the Developer portal as in your Discord application, otherwise it won't work.** (You can add the other account as app tester though.)
    * You're setting this stuff up for your own account, not for any bot or anything else.
 4. In the Oauth2 settings, set the redirect URI to `http://localhost:1337/callback`
