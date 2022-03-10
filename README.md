@@ -16,6 +16,7 @@ This is a plugin for Stream Deck for managing Discord Voice chats:
 * If the plugin does not work:
    * Try uninstalling and reinstalling it.
    * Make sure you're not running the Discord or the Stream Deck software with administrator privileges.
+   * If that does not help, you can report the problem by following [these steps](DIAGNOSTICS.md).
 
 * If you have some feedback, ask around on [Stream Deck Labs Discord server](https://discord.com/invite/294BQE6Xdp) on the `#danols-plugin-support` channel.
 * If you really feel like giving me some money, you can use [PayPal](https://www.paypal.com/donate/?hosted_button_id=QZC5P67TBTRX6).
