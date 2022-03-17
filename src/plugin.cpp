@@ -63,6 +63,9 @@ bool Plugin::init(const ESDConfig &esdConfig) {
 		});
 
 		connect(&deck, &QStreamDeckPlugin::keyDown, this, [this](const QStreamDeckAction &action) {
+			if(discord.isProcessing())
+				return;
+
 			if(!discord.isConnected() && !connectToDiscord()) {
 				qDebug() << "Keydown connect failed";
 				deck.showAlert(action.context);
@@ -80,6 +83,9 @@ bool Plugin::init(const ESDConfig &esdConfig) {
 			btn->onPressed();
 		});
 		connect(&deck, &QStreamDeckPlugin::keyUp, this, [this](const QStreamDeckAction &action) {
+			if(discord.isProcessing())
+				return;
+
 			auto d = devices_.value(contextDevices_.value(action.context));
 			if(!d)
 				return;
