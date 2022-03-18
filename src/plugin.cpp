@@ -104,6 +104,9 @@ bool Plugin::init(const ESDConfig &esdConfig) {
 			discord.sendCommand("SUBSCRIBE", {}, {
 				{"evt", "VOICE_CHANNEL_SELECT"}
 			});
+
+			for(const auto &dev: devices_)
+				dev->updateData();
 		});
 		connect(&discord, &QDiscord::messageReceived, this, [this](const QJsonObject &msg) {
 			for(const auto &d: devices_)
