@@ -30,6 +30,7 @@ This is a plugin for Stream Deck for managing Discord Voice chats:
 4. In the Oauth2 settings, set the redirect URI to `http://localhost:1337/callback`
 5. Hit "Save changes".
 6. From the OAuth2 tab, copy `Client ID` and `Client secret` and paste it in your Discord Volume Mixer button settings (the button used to access the volume mixer).
+   * If you don't see the client secret, but only the "Reset Secret" button, simply click on the button, it will give you a new secret.
 7. Click on the Discord Volume Mixer button. Discord will ask you for some permissions & firewall and stuff.
 8. Done.
 
@@ -47,6 +48,7 @@ This is a plugin for Stream Deck for managing Discord Voice chats:
 * Big cudos to [Krabs](https://github.com/krabs-github) for helping me out with profiles for the XL version and testing and overall being awesome.
 
 ## TODO
+* Self status button
 * QtStreamDeck create subfolder (for easier including)
 * Volume increase step also in the global settings
 * Prompts for authorization when entering both client ID and secret (check if the stuff is not empty first)
